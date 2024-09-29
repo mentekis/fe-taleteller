@@ -9,18 +9,61 @@ import {
     FormMessage,
     Input,
 } from "@/components/ui";
-import { FormEvent } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { AuthLayout } from "./layout.auth";
 import { Link } from "react-router-dom";
+import { AuthLayout } from "./layout.auth";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+
+const passwordValidation = new RegExp(
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+);
+
+const registerSchema = z.object({
+    username: z
+        .string({ message: "Please input your name, ok?" })
+        .min(3, { message: "Name at least 3 characters" }),
+    email: z
+        .string({ message: "Please input your email, ok?" })
+        .email({ message: "Use valid email" }),
+    password: z
+        .string({ message: "Please input your password" })
+        .min(8, { message: "Password at least 8 characters" })
+        .regex(passwordValidation, {
+            message:
+                "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+        }),
+});
 
 export const Register = () => {
-    const form = useForm();
+    // State
+    const [currentData, setCurrentData] = useState<
+        z.infer<typeof registerSchema>
+    >({
+        username: "",
+        email: "",
+        password: "",
+    });
 
-    function handleSubmitRegister(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-    }
+    const form = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: currentData,
+    });
+
+    const submitRegister = (data: z.infer<typeof registerSchema>) =>
+        console.info(data);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setCurrentData({
+                username: "John Doe",
+                email: "3yEzy@example.com",
+                password: "12345678",
+            });
+        }, 2000);
+    }, []);
 
     return (
         <AuthLayout>
@@ -35,7 +78,7 @@ export const Register = () => {
                     <Form {...form}>
                         <form
                             className="space-y-4"
-                            onSubmit={handleSubmitRegister}
+                            onSubmit={form.handleSubmit(submitRegister)}
                         >
                             <FormField
                                 control={form.control}

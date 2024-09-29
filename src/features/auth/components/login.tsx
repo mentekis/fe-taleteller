@@ -9,18 +9,29 @@ import {
     FormMessage,
     Input,
 } from "@/components/ui";
-import { FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { AuthLayout } from "./layout.auth";
 import { Link } from "react-router-dom";
+import { z } from "zod";
+import { AuthLayout } from "./layout.auth";
+
+const loginSchema = z.object({
+    email: z
+        .string({ message: "Please input your email, ok?" })
+        .email({ message: "Use valid email" }),
+    password: z
+        .string({ message: "Please input your password" })
+        .min(8, { message: "Password at least 8 characters" }),
+});
 
 export const Login = () => {
-    const form = useForm();
+    const form = useForm<z.infer<typeof loginSchema>>({
+        resolver: zodResolver(loginSchema),
+    });
 
-    function handleSubmitLogin(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-    }
+    const submitLogin = (data: z.infer<typeof loginSchema>) =>
+        console.info(data);
 
     return (
         <AuthLayout>
@@ -35,11 +46,11 @@ export const Login = () => {
                     <Form {...form}>
                         <form
                             className="space-y-4"
-                            onSubmit={handleSubmitLogin}
+                            onSubmit={form.handleSubmit(submitLogin)}
                         >
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
