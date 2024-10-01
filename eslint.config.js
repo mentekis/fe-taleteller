@@ -23,7 +23,8 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      "no-console": ["error", { allow: ["error", "info", "warn"] }]
+      "no-console": ["error", { allow: ["error", "info", "warn"] }],
+      "@typescript-eslint/no-empty-object-type": ["error", { allowInterfaces: "always" }]
     },
   },
 )
