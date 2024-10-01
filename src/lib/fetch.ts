@@ -2,17 +2,18 @@ function urlGenerator(pathURL: string) {
     return `http://localhost:3000${pathURL}`;
 }
 
-export default async function jsonFetcher<T>(pathURL: string, data: T) {
+export default async function jsonFetcher<T>(pathURL: string, data: T, options?: RequestInit) {
     // Create full url
     const url = urlGenerator(pathURL);
 
     const res = await fetch(url, {
-        method: "POST",
+        ...options,
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     });
+
     return res.json();
 }
 

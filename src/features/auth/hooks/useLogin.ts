@@ -12,19 +12,17 @@ export default function useLogin() {
         resolver: zodResolver(loginSchema),
     });
 
-    const { mutate: submitLogin, isError, isPending, isSuccess } = useMutation({
+    const { mutate: submitLogin, isError, isPending } = useMutation({
         mutationKey: ["login"],
-        mutationFn: (data: TLogin) => handleSubmitLogin(data)
+        mutationFn: (data: TLogin) => handleSubmitLogin(data),
+        onSuccess: () => {
+            navigate("/dashboard");
+        },
     });
 
     function onSubmit(data: TLogin) {
         submitLogin(data);
     }
 
-    // If successful, redirect to home
-    if (isSuccess) {
-        navigate("/register");
-    }
-
-    return { form, onSubmit, isError, isLoading: isPending, isSuccess };
+    return { form, onSubmit, isError, isLoading: isPending };
 }

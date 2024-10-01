@@ -20,10 +20,11 @@ export type TLogin = z.infer<typeof loginSchema>;
 export const handleSubmitLogin = async (data: TLogin) => {
     try {
         // TODO: implement login
-        await jsonFetcher("/auth/register", {
+        await jsonFetcher("/auth/login", data, {
             method: "POST",
-            body: data,
+            credentials: 'include'
         });
+
     } catch (error) {
         console.warn(error);
         throw new Error("Something wrong with your email or password");

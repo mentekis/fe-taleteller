@@ -25,9 +25,8 @@ export const submitRegister = async (data: TRegister) => {
 
     try {
         // TODO: Implement register
-        await jsonFetcher("/auth/register", {
+        await jsonFetcher("/auth/register", data, {
             method: "POST",
-            body: data,
         });
     } catch (error) {
         console.warn(error);
