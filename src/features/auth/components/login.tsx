@@ -13,9 +13,10 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 import { AuthLayout } from "./layout.auth";
+import { Loader2 } from "lucide-react";
 
 export const Login = () => {
-    const { form, onSubmit } = useLogin();
+    const { form, onSubmit, isError, isLoading } = useLogin();
 
     return (
         <AuthLayout>
@@ -26,6 +27,12 @@ export const Login = () => {
 
                 <section className="w-[400px] max-w-[400px] space-y-2">
                     <h1>Login</h1>
+
+                    {isError && (
+                        <p className="text-red-500">
+                            Invalid email or password
+                        </p>
+                    )}
 
                     <Form {...form}>
                         <form
@@ -65,7 +72,14 @@ export const Login = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                disabled={isLoading}
+                            >
+                                {isLoading && (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                )}
                                 Login
                             </Button>
                         </form>
@@ -73,7 +87,11 @@ export const Login = () => {
                             type="button"
                             className="w-full"
                             variant={"outline"}
+                            disabled={isLoading}
                         >
+                            {isLoading && (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
                             Login with Google
                         </Button>
                     </Form>
