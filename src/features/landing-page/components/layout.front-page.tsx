@@ -17,9 +17,7 @@ export const FrontPageLayout = (props: IFrontPageLayoutProps) => {
                 </div>
 
                 <div className="flex h-full w-full items-center justify-center p-8">
-                    <div className="relative h-[75%] w-full cursor-default">
-                        {props.children}
-                    </div>
+                    {props.children}
                 </div>
             </section>
         </main>
