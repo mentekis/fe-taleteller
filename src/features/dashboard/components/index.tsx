@@ -12,6 +12,7 @@ import {
 import { useAtomValue } from "jotai";
 import { PlaneIcon } from "lucide-react";
 import { LayoutDashboard } from "./layout.dashboard";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
     const user = useAtomValue(userAtom);
@@ -52,7 +53,9 @@ export const Dashboard = () => {
                         <h2 className="text-center">Create your own story!</h2>
 
                         <div className="flex justify-center gap-4">
-                            <Button>Start new Story</Button>
+                            <Button asChild>
+                                <Link to={"/create-story"}>Create your story</Link>
+                            </Button>
 
                             <Button variant={"outline"}>
                                 Explore somebody premise

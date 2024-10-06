@@ -1,5 +1,7 @@
 import { Login, Register } from "@/features/auth/components";
 import { Dashboard } from "@/features/dashboard/components";
+import { StoryCreateForm } from "@/features/stories/create/components";
+import { Stages } from "@/features/stories/create/components/stages";
 import { Route } from "react-router-dom";
 import { BrowserRouter, Routes } from "react-router-dom";
 
@@ -13,6 +15,11 @@ export const AppRouter = () => {
                 <Route element={<Register />} path="/register" />
 
                 <Route element={<Dashboard />} path="/dashboard" />
+                <Route element={<StoryCreateForm />} path="/create-story" />
+                <Route
+                    element={<Stages />}
+                    path="/story/:storyId/stages/:stage"
+                />
             </Routes>
         </BrowserRouter>
     );

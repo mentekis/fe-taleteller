@@ -9,6 +9,10 @@ export const LayoutDashboard = ({ children }: PropsWithChildren) => {
     const setUserAtom = useSetAtom(userAtom);
 
     useEffect(() => {
+        Cookies.set(
+            "user",
+            JSON.stringify({ name: "User", email: "bomsiwor@gmail.com" })
+        );
         const getUser = Cookies.get("user") as string;
 
         const parsedData = JSON.parse(getUser);

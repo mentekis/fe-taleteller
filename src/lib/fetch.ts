@@ -17,6 +17,14 @@ export default async function jsonFetcher<T>(pathURL: string, data: T, options?:
     return res.json();
 }
 
+export function simulateFetch<T>(dummyData: T, timeOut: number): Promise<T> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(dummyData);
+        }, timeOut);
+    });
+}
+
 // export default async function formDataFetcher<T>(pathURL: string, data: T) {
 //     // Create full url
 //     const url = urlGenerator(pathURL);
