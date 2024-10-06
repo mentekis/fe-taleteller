@@ -52,10 +52,24 @@ export default {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
-				}
+				},
+				'chathams-blue': {
+					'50': '#eefaff',
+					'100': '#dcf4ff',
+					'200': '#b2ecff',
+					'300': '#6ddeff',
+					'400': '#20ceff',
+					'500': '#00b8ff',
+					'600': '#0094df',
+					'700': '#0076b4',
+					'800': '#006394',
+					'900': '#005179',
+					'950': '#003451',
+				},
 			},
 			fontFamily: {
-				fredoka: ["Fredoka", "sans-serif"]
+				fredoka: ["Fredoka", "sans-serif"],
+				suse: ["SUSE", "sans-serif"]
 			}
 		}
 	},
