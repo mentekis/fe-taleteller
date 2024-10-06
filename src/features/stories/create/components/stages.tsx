@@ -93,16 +93,13 @@ export const Stages = () => {
         },
     });
 
-    const {
-        isPending: isLoadingNextStage,
-        isError,
-        mutate: handleNextStage,
-    } = useMutation({
-        mutationKey: ["nextStage"],
-        mutationFn: async (choosedOption: string) => {
-            return await simulateFetch(choosedOption, 2000);
-        },
-    });
+    const { isPending: isLoadingNextStage, mutate: handleNextStage } =
+        useMutation({
+            mutationKey: ["nextStage"],
+            mutationFn: async (choosedOption: string) => {
+                return await simulateFetch(choosedOption, 2000);
+            },
+        });
 
     // State
     const [isPotrait, setIsPotrait] = useState<boolean>(
