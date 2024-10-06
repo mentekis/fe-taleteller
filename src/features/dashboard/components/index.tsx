@@ -1,24 +1,15 @@
 import { userAtom } from "@/atom";
-import { CardStory, ICardStoryProps } from "@/components/story";
-import {
-    Button,
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-    Input,
-} from "@/components/ui";
+import { ICardStoryProps } from "@/components/story";
+import { Button } from "@/components/ui";
 import { useAtomValue } from "jotai";
-import { PlaneIcon } from "lucide-react";
-import { LayoutDashboard } from "./layout.dashboard";
+import { LogOut, PlaneIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
-    const user = useAtomValue(userAtom);
+    const _user = useAtomValue(userAtom);
 
     // Dummy card data
-    const dummyCardData: ICardStoryProps = {
+    const _dummyCardData: ICardStoryProps = {
         description:
             "This is the story about something you would not ever expect",
         title: "Story Title",
@@ -31,118 +22,53 @@ export const Dashboard = () => {
     };
 
     return (
-        <LayoutDashboard>
-            <main>
-                {/* Greeting & Initial action card */}
-                <section className="sticky top-0 z-10 mb-2 flex items-center justify-between bg-white py-4">
-                    <div className="space-y-1">
-                        <h4>Bon Voyage</h4>
-                        <h1 className="font-bold">{user?.name}</h1>
-                    </div>
+        <main className="font-suse h-screen w-screen bg-[url('/dashboard-background.webp')] bg-cover p-10">
+            <div className="from-chathams-blue-100/50 flex h-full overflow-hidden rounded-2xl bg-gradient-to-tl to-white shadow-xl backdrop-blur">
+                <aside className="border-r-chathams-blue-950/50 relative w-[240px] space-y-4 border-r-2 p-4 transition-all duration-500 hover:bg-black/5">
+                    <div className="flex gap-4">
+                        <img
+                            src="/favicon-32x32.png"
+                            alt="Icon"
+                            className="rounded-xl"
+                        />
 
-                    <div className="relative w-[50%]">
-                        <Input placeholder="search someone adventure" />
-
-                        <PlaneIcon className="absolute right-0 top-0 -translate-x-1/2 translate-y-1/3" />
-                    </div>
-                </section>
-
-                {/* Create own story */}
-                <section>
-                    <div className="space-y-4 rounded-lg bg-[#d1f9ff] p-5">
-                        <h2 className="text-center">Create your own story!</h2>
-
-                        <div className="flex justify-center gap-4">
-                            <Button asChild>
-                                <Link to={"/create-story"}>Create your story</Link>
-                            </Button>
-
-                            <Button variant={"outline"}>
-                                Explore somebody premise
-                            </Button>
-                        </div>
-                    </div>
-                </section>
-
-                {/* User story */}
-                <section>
-                    <div className="space-y-4 rounded-md p-5">
-                        <h2 className="text-center font-bold">
-                            your awesome stories!
+                        <h2 className="hover:text-chathams-blue-700 cursor-default select-none font-semibold transition duration-100">
+                            Taleteller!
                         </h2>
-
-                        <div className="space-y-4">
-                            <Carousel className="w-full">
-                                <CarouselContent className="-ml-1">
-                                    {Array.from({ length: 5 }).map(
-                                        (_, index) => (
-                                            <CarouselItem
-                                                key={index}
-                                                className="flex justify-center pl-1 md:basis-1/2 lg:basis-1/3"
-                                            >
-                                                <div className="p-1">
-                                                    <CardStory
-                                                        {...dummyCardData}
-                                                    />
-                                                </div>
-                                            </CarouselItem>
-                                        )
-                                    )}
-                                    {/* More Stories */}
-                                    <CarouselItem className="flex justify-center pl-1 md:basis-1/2 lg:basis-1/3">
-                                        <div className="p-1">
-                                            <div className="h-[350px] w-[350px] rounded border border-black">
-                                                See more...
-                                            </div>
-                                        </div>
-                                    </CarouselItem>
-                                </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
-                            </Carousel>
-
-                            <Button variant={"outline"} className="w-full">
-                                View all
-                            </Button>
-                        </div>
                     </div>
-                </section>
 
-                {/* Explore story */}
-                <section className="bg-violet-50">
-                    <div className="space-y-4 rounded-md p-5">
-                        <h2 className="text-center font-bold">
-                            Explore other adventurer story
-                        </h2>
+                    <div>
+                        <p className="my-2 text-sm text-slate-500">MAIN MENU</p>
 
-                        <Carousel className="w-full">
-                            <CarouselContent className="-ml-1">
-                                {Array.from({ length: 5 }).map((_, index) => (
-                                    <CarouselItem
-                                        key={index}
-                                        className="flex justify-center pl-1 md:basis-1/2 lg:basis-1/3"
-                                    >
-                                        <div>
-                                            {/* Card */}
-                                            <CardStory {...dummyCardData} />
-                                        </div>
-                                    </CarouselItem>
-                                ))}
-                                {/* More Stories */}
-                                <CarouselItem className="flex justify-center pl-1 md:basis-1/2 lg:basis-1/3">
-                                    <div className="p-1">
-                                        <div className="h-[350px] w-[350px] rounded border border-black">
-                                            See more...
-                                        </div>
-                                    </div>
-                                </CarouselItem>
-                            </CarouselContent>
-                            <CarouselPrevious />
-                            <CarouselNext />
-                        </Carousel>
+                        <menu className="space-y-2">
+                            <div className="hover:bg-chathams-blue-600/25 hover:text-chathams-blue-800 flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2 text-slate-500 shadow-inner transition duration-100">
+                                <PlaneIcon size={16} />
+                                <Link to={"/my-stories"}>Home</Link>
+                            </div>
+                            <div className="hover:bg-chathams-blue-600 flex cursor-pointer items-center gap-2 rounded-xl bg-black px-4 py-2 text-white transition duration-100">
+                                <PlaneIcon size={16} />
+                                <Link to={"/my-stories"}>Your Stories</Link>
+                            </div>
+                            <div className="hover:bg-chathams-blue-600/25 hover:text-chathams-blue-800 flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2 text-slate-500 shadow-inner transition duration-100">
+                                <PlaneIcon size={16} />
+                                <Link to={"/my-stories"}>Explore</Link>
+                            </div>
+                        </menu>
                     </div>
-                </section>
-            </main>
-        </LayoutDashboard>
+
+                    <div className="absolute bottom-4">
+                        <Button
+                            variant={"outline"}
+                            className="hover:text-chathams-blue-600 flex w-full items-center gap-4 rounded-xl text-slate-500"
+                        >
+                            <LogOut size={16} />
+                            <p>Logout</p>
+                        </Button>
+                    </div>
+                </aside>
+
+                <section className="w-[calc(100%-240px)]"></section>
+            </div>
+        </main>
     );
 };
