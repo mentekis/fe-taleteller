@@ -1,75 +1,116 @@
-import { Clock } from "lucide-react";
-import { Avatar, AvatarImage, Badge } from "../ui";
-import { AvatarFallback } from "@radix-ui/react-avatar";
+import { formatRelativeTime } from "@/lib/time-parser";
+import { PlayIcon } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui";
 
 export interface ICardStoryProps {
     title: string;
+    author: string;
+    avatarUrl: string;
     image: string;
     description: string;
     stages: number;
     status: string;
-    duration?: number;
-    withAvatar?: boolean;
-    avatarUrl?: string;
-    author?: string;
+    createdAt: Date;
+    handleClick: () => void;
 }
 
-export const CardStory = (props: ICardStoryProps) => {
-    // Calculate duration
-    const duration = props.duration || Math.floor(props.stages * 1.5);
+type TCardBodyProps = Omit<
+    ICardStoryProps,
+    "image" | "createdAt" | "handleClick"
+> & {
+    duration?: number;
+};
 
+type TCardFooterProps = Pick<ICardStoryProps, "createdAt">;
+
+export const CardStory = (props: ICardStoryProps) => {
+    const cardBodyData: TCardBodyProps = props;
+
+    return (
+        <div
+            className="group flex h-[320px] w-[240px] cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-lg"
+            onClick={props.handleClick}
+        >
+            {/* Image */}
+            <img
+                src={props.image}
+                alt="Example 1"
+                className="h-[150px] w-full object-cover"
+            />
+
+            {/* Card body */}
+            <CardBody {...cardBodyData} />
+
+            {/* Card footer */}
+            <CardFooter createdAt={props.createdAt} />
+        </div>
+    );
+};
+
+const CardBody = (props: TCardBodyProps) => {
+    // Other function
     // Generate avatar fallback
     const avatarFallback = props.author?.slice(0, 2).toUpperCase();
 
+    // Calculate duration
+    const duration = props.duration || Math.floor(props.stages * 1.5);
+
+    // Cut the long name
+    const name =
+        props.author.length > 12
+            ? props.author.slice(0, 12) + "..."
+            : props.author;
+
     return (
-        <div>
-            <div className="relative h-[450px] overflow-hidden rounded-xl bg-white shadow-sm">
-                {/* Card thumbnail */}
-                <div className="h-[50%] w-full">
-                    <img
-                        className="h-full w-full object-cover"
-                        src={props.image}
-                        alt={`${props.title} thumbnail`}
-                    />
-                </div>
-                <div className="p-6">
-                    {/* Card Avatar */}
-                    {props.withAvatar && (
-                        <div className="flex items-center gap-2">
-                            <Avatar className="h-5 w-5">
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                                <AvatarFallback>
-                                    {avatarFallback}
-                                </AvatarFallback>
-                            </Avatar>
+        <div className="p-3">
+            {/* Author and status */}
+            <div className="flex items-center justify-between">
+                {/* Author */}
+                <div className="flex items-center gap-2">
+                    <Avatar className="h-[28px] w-[28px]">
+                        <AvatarImage src={props.avatarUrl} alt={props.author} />
+                        <AvatarFallback>{avatarFallback}</AvatarFallback>
+                    </Avatar>
 
-                            <p className="text-sm text-slate-500">User</p>
-                        </div>
-                    )}
-
-                    {/* Card Title */}
-                    <div className="mt-2">
-                        <h3>{props.title}</h3>
-                        <p className="text-sm text-slate-400">
-                            {props.description}
+                    <div className="text-[10pt]">
+                        <p>
+                            By{" "}
+                            <b className="font-semibold text-chathams-blue-900">
+                                {name}
+                            </b>
                         </p>
                     </div>
+                </div>
 
-                    {/* Card footer */}
-                    <div className="absolute bottom-0 left-0 w-full p-6">
-                        <div className="flex w-full items-end justify-between">
-                            <div>
-                                <p className="text-xs">{props.stages} stages</p>
-                                <Badge>{props.status}</Badge>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Clock size={14} />
-                                <p className="text-xs">~{duration} min</p>
-                            </div>
-                        </div>
-                    </div>
+                {/* Status */}
+                <div>
+                    <p className="text-[8pt] text-slate-500">{props.status}</p>
                 </div>
             </div>
+
+            <h5 className="text-[12pt] font-semibold transition duration-100 group-hover:text-chathams-blue-900">
+                {props.title}
+            </h5>
+            <p className="text-[8pt]">
+                {props.stages} pages (~{duration} min)
+            </p>
+        </div>
+    );
+};
+
+const CardFooter = ({ createdAt }: TCardFooterProps) => {
+    // Other function
+    // Format date
+    const formattedDate = formatRelativeTime(createdAt);
+
+    return (
+        <div className="mt-auto flex items-center justify-between px-3 pb-3">
+            <p className="text-[8pt] text-slate-500">{formattedDate}</p>
+
+            <PlayIcon
+                size={24}
+                className="rounded bg-chathams-blue-900 fill-white stroke-none p-1 transition group-hover:bg-white group-hover:fill-chathams-blue-900 group-hover:ring-1 group-hover:ring-chathams-blue-900"
+            />
         </div>
     );
 };

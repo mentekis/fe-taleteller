@@ -3,16 +3,22 @@ import { useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import { PropsWithChildren, useEffect } from "react";
 import { NavbarDashboard } from "./navbar.dashboard";
+import { NavbarRowDashboard } from "./navbar-row.dashboard";
+import { PlaneIcon } from "lucide-react";
+import { DashboardHeader } from "./header.dashboard";
 
 export const LayoutDashboard = ({ children }: PropsWithChildren) => {
     // Atom
     const setUserAtom = useSetAtom(userAtom);
 
     useEffect(() => {
-        Cookies.set(
-            "user",
-            JSON.stringify({ name: "User", email: "bomsiwor@gmail.com" })
-        );
+        // Cookies.set(
+        //     "user",
+        //     JSON.stringify({
+        //         name: "John Doe Waluyo III",
+        //         email: "bomsiwor@gmail.com",
+        //     })
+        // );
         const getUser = Cookies.get("user") as string;
 
         const parsedData = JSON.parse(getUser);
@@ -21,14 +27,32 @@ export const LayoutDashboard = ({ children }: PropsWithChildren) => {
     }, [setUserAtom]);
 
     return (
-        <main className="bg-[#fdffef] p-5 font-fredoka lg:flex">
-            <NavbarDashboard />
+        <main className="h-screen w-screen bg-[url('/dashboard-background.webp')] bg-cover p-10 font-suse">
+            <div className="flex h-full overflow-hidden rounded-2xl bg-gradient-to-tl from-chathams-blue-100/50 to-white shadow-xl backdrop-blur">
+                <NavbarDashboard>
+                    <NavbarRowDashboard
+                        title="Home"
+                        icon={<PlaneIcon size={16} />}
+                        to="/"
+                    />
+                    <NavbarRowDashboard
+                        title="Your Stories"
+                        icon={<PlaneIcon size={16} />}
+                        to="/"
+                    />
+                    <NavbarRowDashboard
+                        title="Explore"
+                        icon={<PlaneIcon size={16} />}
+                        to="/"
+                    />
+                </NavbarDashboard>
 
-            <main className="w-full space-y-4 pb-10 pl-6 pr-2 pt-2 lg:w-[calc(100%-240px)]">
-                <div className="rounded-md border-2 border-black bg-white p-8">
+                <section className="relative w-[calc(100%-240px)] overflow-y-scroll bg-white p-6 shadow-2xl">
+                    <DashboardHeader />
+
                     {children}
-                </div>
-            </main>
+                </section>
+            </div>
         </main>
     );
 };

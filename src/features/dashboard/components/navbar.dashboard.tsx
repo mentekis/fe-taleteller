@@ -1,51 +1,35 @@
-import { userAtom } from "@/atom";
-import { Avatar, AvatarFallback, AvatarImage, Button } from "@/components/ui";
-import { useAtomValue } from "jotai";
-import { BookIcon, LogOutIcon, Telescope } from "lucide-react";
-import { NavbarRowDashboard } from "./navbar-row.dashboard";
+import { Button } from "@/components/ui";
+import { LogOut } from "lucide-react";
+import { PropsWithChildren } from "react";
 
-export const NavbarDashboard = () => {
-    // Atom
-    const user = useAtomValue(userAtom);
-
-    // Supporting data manipulation
-    const avatarFallback = user?.name.slice(0, 2).toUpperCase();
-
+export const NavbarDashboard = ({ children }: PropsWithChildren) => {
     return (
-        <aside className="hidden flex-col justify-between px-4 pb-8 pt-2 lg:sticky lg:top-2 lg:flex lg:h-screen lg:w-[240px]">
-            <div className="space-y-4">
-                {/* Brand */}
-                <h2 className="font-medium text-[#ef4350]">Taleteller</h2>
+        <aside className="relative w-[240px] space-y-4 p-4 transition-all duration-500 hover:bg-black/5">
+            <div className="flex gap-4">
+                <img
+                    src="/favicon-32x32.png"
+                    alt="Icon"
+                    className="rounded-xl"
+                />
 
-                {/* Avatar */}
-                <div className="flex cursor-pointer select-none gap-3 rounded-md border-2 border-black bg-[#fdd20d] px-2 py-4 hover:bg-[#ffe645]">
-                    <div>
-                        <Avatar className="h-10 w-10">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>{avatarFallback}</AvatarFallback>
-                        </Avatar>
-                    </div>
-
-                    <div>
-                        <p>{user?.name}</p>
-                        <p className="text-xs text-white">Manage Profile</p>
-                    </div>
-                </div>
-
-                {/* Navbar */}
-                <nav className="space-y-4">
-                    <NavbarRowDashboard icon={<BookIcon />} title="Library" />
-
-                    <NavbarRowDashboard icon={<Telescope />} title="Explore" />
-                </nav>
+                <h2 className="cursor-default select-none font-semibold transition duration-100 hover:text-chathams-blue-700">
+                    Taleteller!
+                </h2>
             </div>
 
             <div>
-                <Button variant="outline" size={"sm"} className="w-full">
-                    <div className="flex items-center justify-between gap-2">
-                        <p>Logout</p>
-                        <LogOutIcon size={14} />
-                    </div>
+                <p className="my-2 text-sm text-slate-500">MAIN MENU</p>
+
+                <menu className="space-y-2">{children}</menu>
+            </div>
+
+            <div className="absolute bottom-4">
+                <Button
+                    variant={"outline"}
+                    className="flex w-full items-center gap-4 rounded-xl text-slate-500 hover:text-chathams-blue-600"
+                >
+                    <LogOut size={16} />
+                    <p>Logout</p>
                 </Button>
             </div>
         </aside>

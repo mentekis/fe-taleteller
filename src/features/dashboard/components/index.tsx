@@ -1,74 +1,211 @@
-import { userAtom } from "@/atom";
-import { ICardStoryProps } from "@/components/story";
-import { Button } from "@/components/ui";
-import { useAtomValue } from "jotai";
-import { LogOut, PlaneIcon } from "lucide-react";
+import { OpenAIIcon } from "@/components/icon/openai";
+import { CardStory } from "@/components/story";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui";
+import { simulateFetch } from "@/lib/fetch";
+import { useMutation } from "@tanstack/react-query";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { LayoutDashboard } from "./layout.dashboard";
 
 export const Dashboard = () => {
-    const _user = useAtomValue(userAtom);
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const [selectedID, setSelectedID] = useState<string>("");
 
-    // Dummy card data
-    const _dummyCardData: ICardStoryProps = {
-        description:
-            "This is the story about something you would not ever expect",
-        title: "Story Title",
-        image: "https://images.unsplash.com/photo-1565006111656-06a8a9c8f53b?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        stages: 8,
-        status: "Completed",
-        withAvatar: true,
-        avatarUrl: "https://github.com/shadcn.png",
-        author: "User",
-    };
+    const {
+        data,
+        isPending: isLoading,
+        mutate: fetchData,
+    } = useMutation({
+        mutationKey: ["card"],
+        mutationFn: async () => {
+            console.info("fetching");
+            return await simulateFetch("Judul", 2000);
+        },
+    });
+
+    useEffect(() => {
+        fetchData();
+        console.info("fasdf");
+    }, [selectedID, fetchData]);
+
+    function handleOpenModal(id: string) {
+        setDialogOpen(true);
+        setSelectedID(id);
+    }
 
     return (
-        <main className="font-suse h-screen w-screen bg-[url('/dashboard-background.webp')] bg-cover p-10">
-            <div className="from-chathams-blue-100/50 flex h-full overflow-hidden rounded-2xl bg-gradient-to-tl to-white shadow-xl backdrop-blur">
-                <aside className="border-r-chathams-blue-950/50 relative w-[240px] space-y-4 border-r-2 p-4 transition-all duration-500 hover:bg-black/5">
-                    <div className="flex gap-4">
-                        <img
-                            src="/favicon-32x32.png"
-                            alt="Icon"
-                            className="rounded-xl"
-                        />
+        <LayoutDashboard>
+            <div className="my-4 flex w-full justify-between rounded-2xl bg-chathams-blue-700 px-4 py-2 text-white">
+                <div>
+                    <h2 className="text-[16pt] font-semibold">
+                        Ready to start your journey?
+                    </h2>
+                    <p className="text-[9pt]">
+                        Always start with new experience
+                    </p>
 
-                        <h2 className="hover:text-chathams-blue-700 cursor-default select-none font-semibold transition duration-100">
-                            Taleteller!
-                        </h2>
-                    </div>
+                    <Button
+                        className="mt-2 flex justify-between gap-4 rounded-xl text-chathams-blue-900"
+                        size={"sm"}
+                        variant={"outline"}
+                    >
+                        <p>Let's Go!</p> <ArrowRight size={16} />
+                    </Button>
+                </div>
 
-                    <div>
-                        <p className="my-2 text-sm text-slate-500">MAIN MENU</p>
+                <div className="flex items-center gap-4">
+                    <OpenAIIcon
+                        fontSize={48}
+                        className="transition duration-200 hover:rotate-90"
+                    />
 
-                        <menu className="space-y-2">
-                            <div className="hover:bg-chathams-blue-600/25 hover:text-chathams-blue-800 flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2 text-slate-500 shadow-inner transition duration-100">
-                                <PlaneIcon size={16} />
-                                <Link to={"/my-stories"}>Home</Link>
-                            </div>
-                            <div className="hover:bg-chathams-blue-600 flex cursor-pointer items-center gap-2 rounded-xl bg-black px-4 py-2 text-white transition duration-100">
-                                <PlaneIcon size={16} />
-                                <Link to={"/my-stories"}>Your Stories</Link>
-                            </div>
-                            <div className="hover:bg-chathams-blue-600/25 hover:text-chathams-blue-800 flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2 text-slate-500 shadow-inner transition duration-100">
-                                <PlaneIcon size={16} />
-                                <Link to={"/my-stories"}>Explore</Link>
-                            </div>
-                        </menu>
-                    </div>
-
-                    <div className="absolute bottom-4">
-                        <Button
-                            variant={"outline"}
-                            className="hover:text-chathams-blue-600 flex w-full items-center gap-4 rounded-xl text-slate-500"
-                        >
-                            <LogOut size={16} />
-                            <p>Logout</p>
-                        </Button>
-                    </div>
-                </aside>
-
-                <section className="w-[calc(100%-240px)]"></section>
+                    <p>AI Powered Storyteller</p>
+                </div>
             </div>
-        </main>
+
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogContent
+                    className="max-w-2xl"
+                    onInteractOutside={(e) => e.preventDefault()}
+                >
+                    <DialogHeader>
+                        <DialogTitle className="text-[16pt] font-semibold">
+                            Story Detail
+                        </DialogTitle>
+                        <DialogDescription>
+                            {isLoading && <p>Loding...</p>}
+
+                            {!isLoading && (
+                                <div className="flex gap-4">
+                                    <div className="w-1/3">
+                                        <img
+                                            src="/visualnovel-example.webp"
+                                            alt="Thumbnail"
+                                            className="aspect-square w-full rounded-md object-cover shadow-md"
+                                        />
+                                    </div>
+
+                                    <div className="flex w-2/3 flex-col">
+                                        <div>
+                                            <p className="text-[9pt] text-slate-500">
+                                                Author
+                                            </p>
+                                            <h4 className="text-[14pt] font-semibold text-black">
+                                                John Doe
+                                            </h4>
+                                        </div>
+
+                                        <div>
+                                            <p className="text-[9pt] text-slate-500">
+                                                Title
+                                            </p>
+                                            <h3 className="text-[14pt] font-semibold text-black">
+                                                {data}
+                                            </h3>
+                                        </div>
+
+                                        <div>
+                                            <p className="text-[9pt] text-slate-500">
+                                                Stage
+                                            </p>
+                                            <h3 className="text-[14pt] font-semibold text-black">
+                                                8 Stages
+                                            </h3>
+                                        </div>
+
+                                        <div className="mt-auto grid grid-cols-2 gap-2">
+                                            <Button variant={"primary"}>
+                                                Read Now
+                                            </Button>
+                                            <Button variant={"outlinePrimary"}>
+                                                Share
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
+
+            <div className="my-8">
+                <div className="flex items-center justify-between">
+                    <p className="text-[16pt] font-medium">
+                        Your Newest Stories
+                    </p>
+
+                    <Link
+                        to={"/"}
+                        className="group flex items-center gap-2 font-light hover:text-chathams-blue-900"
+                    >
+                        <p className="transition group-hover:-translate-x-2">
+                            View all
+                        </p>
+                        <ArrowRight size={16} />
+                    </Link>
+                </div>
+
+                <div>
+                    {/* Card */}
+                    <CardStory
+                        title="Greate David vs Goliath at Mountain"
+                        image="/visualnovel-example.webp"
+                        description="Lorem"
+                        stages={8}
+                        status="Completed"
+                        author="John Doe Waluyo III asdfafd"
+                        avatarUrl="https://github.com/shadcn.png"
+                        createdAt={new Date(Date.now() - 1000 * 60 * 60 * 24)}
+                        handleClick={() => {
+                            handleOpenModal("1");
+                        }}
+                    />
+                </div>
+            </div>
+
+            <div className="my-8">
+                <div className="flex items-center justify-between">
+                    <p className="text-[16pt] font-medium">
+                        Other adventurer also write
+                    </p>
+
+                    <Link
+                        to={"/"}
+                        className="group flex items-center gap-2 font-light hover:text-chathams-blue-900"
+                    >
+                        <p className="transition group-hover:-translate-x-2">
+                            View all
+                        </p>
+                        <ArrowRight size={16} />
+                    </Link>
+                </div>
+
+                <div className="">
+                    {/* Card */}
+                    <CardStory
+                        title="Greate David vs Goliath at Mountain"
+                        image="/visualnovel-example.webp"
+                        description="Lorem"
+                        stages={8}
+                        status="Completed"
+                        author="John Doe Waluyo III asdfafd"
+                        avatarUrl="https://github.com/shadcn.png"
+                        createdAt={new Date(Date.now() - 1000 * 60 * 60 * 24)}
+                        handleClick={() => {
+                            console.info("click");
+                        }}
+                    />
+                </div>
+            </div>
+        </LayoutDashboard>
     );
 };
