@@ -2,9 +2,9 @@ import { PropsWithChildren } from "react";
 
 export const AuthLayout = ({ children }: PropsWithChildren) => {
     return (
-        <main className="font-fredoka grid lg:grid-cols-2">
-            <div className="h-screen p-6">
-                <div className="h-full w-full overflow-hidden rounded-lg bg-white">
+        <main className="grid font-fredoka lg:grid-cols-2">
+            <div className="h-[70vh] md:h-screen">
+                <div className="flex h-full w-full overflow-hidden rounded-lg bg-black">
                     <img
                         src="/Front Cover.jpg"
                         alt="FrontCover"
