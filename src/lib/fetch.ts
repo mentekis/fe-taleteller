@@ -1,3 +1,12 @@
+// import { API_V1 } from "@/config";
+
+// const API_HOSTS: Record<string, string> = {
+//     "V1": API_V1,
+//     "V2": "localhost"
+// }
+
+// type API_VERSION = keyof typeof API_HOSTS;
+
 function urlGenerator(pathURL: string) {
     return `http://localhost:3000${pathURL}`;
 }
