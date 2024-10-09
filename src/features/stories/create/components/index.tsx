@@ -58,7 +58,7 @@ export const StoryCreateForm = () => {
                 setButtonState(null);
             }
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             // Invalidate query
             queryClient.invalidateQueries({
                 queryKey: ["storyInitializer"],

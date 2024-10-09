@@ -18,18 +18,18 @@ export const Stages = () => {
     // Hooks
     const navigate = useNavigate();
 
-    const location = useLocation();
+    const _location = useLocation();
 
     const { storyId, stage } = useParams();
 
-    const { data: stageData, isLoading } = useQuery({
+    const { data: _stageData, _isLoading } = useQuery({
         queryKey: [`${storyId}-${stage}`],
         queryFn: async () => {
             // return await simulateFetch(dummyStageData[Number(stage) - 1], 2000);
         },
     });
 
-    const { isPending: isLoadingNextStage, mutate: handleNextStage } =
+    const { isPending: _isLoadingNextStage, mutate: handleNextStage } =
         useMutation({
             mutationKey: ["nextStage"],
             mutationFn: async (choosedOption: string) => {
@@ -59,7 +59,7 @@ export const Stages = () => {
     }, [isPotrait]);
 
     // Function
-    async function handleChooseOption(e: MouseEvent<HTMLButtonElement>) {
+    async function _handleChooseOption(e: MouseEvent<HTMLButtonElement>) {
         console.info(e.currentTarget.value);
 
         handleNextStage(e.currentTarget.value);
