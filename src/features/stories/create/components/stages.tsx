@@ -6,77 +6,13 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    Skeleton,
 } from "@/components/ui";
 import { simulateFetch } from "@/lib/fetch";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { HomeIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, XIcon } from "lucide-react";
 import { MouseEvent, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { StoryLayout } from "./layout.story";
-
-const dummyStageData = [
-    {
-        _id: "adsfafd",
-        number: 1,
-        imgUrl: "/visualnovel-example.webp",
-        bgmUrl: "",
-        narration: "lorem ipsum",
-        option: [
-            {
-                value: "A",
-                text: "lorem 1",
-            },
-            {
-                value: "B",
-                text: "lorem 2",
-            },
-        ],
-        hasNext: true,
-        hasPrevious: false,
-        isLast: false,
-    },
-    {
-        _id: "adsfafd",
-        number: 2,
-        imgUrl: "/visualnovel-example.webp",
-        bgmUrl: "",
-        narration: null,
-        option: [
-            {
-                value: "A",
-                text: "lorem 1",
-            },
-            {
-                value: "B",
-                text: "lorem 2",
-            },
-        ],
-        hasNext: true,
-        hasPrevious: true,
-        isLast: false,
-    },
-    {
-        _id: "adsfafd",
-        number: 3,
-        imgUrl: "/visualnovel-example.webp",
-        bgmUrl: "",
-        narration: null,
-        option: [
-            {
-                value: "A",
-                text: "lorem 1",
-            },
-            {
-                value: "B",
-                text: "lorem 2",
-            },
-        ],
-        hasNext: false,
-        hasPrevious: true,
-        isLast: false,
-    },
-];
 
 export const Stages = () => {
     // Hooks
@@ -89,7 +25,7 @@ export const Stages = () => {
     const { data: stageData, isLoading } = useQuery({
         queryKey: [`${storyId}-${stage}`],
         queryFn: async () => {
-            return await simulateFetch(dummyStageData[Number(stage) - 1], 2000);
+            // return await simulateFetch(dummyStageData[Number(stage) - 1], 2000);
         },
     });
 
@@ -121,10 +57,6 @@ export const Stages = () => {
         return () =>
             mediaQuery.removeEventListener("change", handleChangeOrientation);
     }, [isPotrait]);
-
-    useEffect(() => {
-        console.info(storyId);
-    }, [storyId]);
 
     // Function
     async function handleChooseOption(e: MouseEvent<HTMLButtonElement>) {
@@ -159,97 +91,52 @@ export const Stages = () => {
 
     return (
         <StoryLayout>
-            {isLoading && <Skeleton className="h-full w-full" />}
+            <div className="relative aspect-video h-full">
+                <img src="/castle.png" alt="Castle" className="stage-image" />
 
-            {!isLoading && (
-                <main className="flex h-full w-full flex-col">
-                    {/* Image section */}
-                    <section className="flex aspect-video h-[80%] justify-center">
-                        <div className="relative w-full overflow-hidden rounded-md border-2 border-black">
-                            <img
-                                src={stageData?.imgUrl}
-                                alt={`Page ${stage}`}
-                                className="h-full w-full object-cover"
-                            />
+                <div className="story-navigator-wrapper absolute">
+                    <Button size={"icon"} className="bg-black bg-opacity-20">
+                        <ArrowLeft />
+                    </Button>
+                    <Button size={"icon"} className="bg-black bg-opacity-20">
+                        <ArrowRight />
+                    </Button>
+                </div>
 
-                            <Button
-                                size={"icon"}
-                                variant={"outline"}
-                                className="absolute right-2 top-2 z-10 rounded-lg shadow-md"
-                            >
-                                <Link to={`/`}>
-                                    <HomeIcon />
-                                </Link>
-                            </Button>
+                <Button
+                    size={"icon"}
+                    className="absolute right-2 top-2 bg-black bg-opacity-20"
+                >
+                    <XIcon />
+                </Button>
 
-                            <div className="absolute bottom-2 left-2 z-10 flex gap-2">
-                                {stageData?.hasPrevious &&
-                                    stageData?.number > 0 && (
-                                        <Button
-                                            onClick={() => {
-                                                navigate(
-                                                    `/story/${storyId}/stages/${
-                                                        Number(stage) - 1
-                                                    }`
-                                                );
-                                            }}
-                                        >
-                                            Previous page
-                                        </Button>
-                                    )}
-                                {stageData?.hasNext && (
-                                    <Button
-                                        onClick={() => {
-                                            navigate(
-                                                `/story/${storyId}/stages/${
-                                                    Number(stage) + 1
-                                                }`,
-                                                {
-                                                    state: {
-                                                        previousStage: stage,
-                                                    },
-                                                }
-                                            );
-                                        }}
-                                    >
-                                        Next page
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    </section>
+                <div className="absolute bottom-0 w-full p-4">
+                    <div className="story-popup">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Commodi nostrum tempora harum sequi magnam
+                            veritatis aperiam repellendus! Similique, harum rem.
+                            Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
 
-                    {/* Story section */}
-                    <section className="flex flex-grow flex-col">
-                        <h3>Stage {stage}</h3>
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                        <Button className="story-popup option" value={"A"}>
+                            <p>
+                                Lorem ipsum dolor, sit amet consectetur
+                                adipisicing elit. Natus, aliquid!
+                            </p>
+                        </Button>
 
-                        <div className="flex flex-grow flex-col justify-between">
-                            <p>{stageData?.narration}</p>
-
-                            {location.state?.previousStage &&
-                                !stageData?.isLast &&
-                                !stageData?.narration && (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {stageData?.option.map((option) => (
-                                            <Button
-                                                key={option.value}
-                                                value={option.value}
-                                                onClick={handleChooseOption}
-                                                disabled={isLoadingNextStage}
-                                            >
-                                                {option.text}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                )}
-
-                            {!location.state?.previousStage &&
-                                !stageData?.isLast &&
-                                !stageData?.narration && <ModalContinueStory />}
-                        </div>
-                    </section>
-                </main>
-            )}
+                        <Button className="story-popup option" value={"B"}>
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur,
+                                adipisicing elit. Enim, quisquam.
+                            </p>
+                        </Button>
+                    </div>
+                </div>
+            </div>
         </StoryLayout>
     );
 };
