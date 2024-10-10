@@ -12,8 +12,8 @@ export const AppRouter = () => {
             <Routes>
                 <Route element={<LandingPage />} path="/" />
 
-                <Route element={<Login />} path="/login" />
-                <Route element={<Register />} path="/register" />
+                <Route element={<Login />} path="/auth/login" />
+                <Route element={<Register />} path="/auth/register" />
 
                 <Route element={<Dashboard />} path="/dashboard" />
                 <Route element={<StoryCreateForm />} path="/create-story" />

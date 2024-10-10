@@ -1,14 +1,7 @@
-// import { API_V1 } from "@/config";
-
-// const API_HOSTS: Record<string, string> = {
-//     "V1": API_V1,
-//     "V2": "localhost"
-// }
-
-// type API_VERSION = keyof typeof API_HOSTS;
+import { API_V1 } from "@/config";
 
 function urlGenerator(pathURL: string) {
-    return `http://localhost:3000${pathURL}`;
+    return `${API_V1}/api/v1${pathURL}`;
 }
 
 export default async function jsonFetcher<T>(pathURL: string, data: T, options?: RequestInit) {
@@ -23,7 +16,14 @@ export default async function jsonFetcher<T>(pathURL: string, data: T, options?:
         body: JSON.stringify(data)
     });
 
-    return res.json();
+    const jsonResponse = await res.json();
+
+    // Throw error if response from server is not OK
+    if (!res.ok) {
+        throw new Error(jsonResponse.message || "Something went wrong");
+    }
+
+    return jsonResponse;
 }
 
 export function simulateFetch<T>(dummyData: T, timeOut: number): Promise<T> {

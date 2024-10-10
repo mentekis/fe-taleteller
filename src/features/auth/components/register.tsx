@@ -19,7 +19,7 @@ export const Register = () => {
     const { form, onSubmit, isError, isLoading } = useRegister();
 
     return (
-        <FrontPageLayout image="./landing-page-taleteller.jpeg">
+        <FrontPageLayout image="/landing-page-taleteller.jpeg">
             <main>
                 <Helmet>
                     <title>Register to Taleteller</title>
@@ -34,7 +34,9 @@ export const Register = () => {
                     </h3>
 
                     {isError && (
-                        <p className="text-destructive">{isError.message}</p>
+                        <p className="text-destructive">
+                            Error : {isError.message}
+                        </p>
                     )}
 
                     <Form {...form}>
@@ -44,7 +46,7 @@ export const Register = () => {
                         >
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="name"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
@@ -62,22 +64,42 @@ export const Register = () => {
                                 )}
                             />
 
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="coolemail@mail.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Your email address
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
                             <div className="grid grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="email"
+                                    name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Email</FormLabel>
+                                            <FormLabel>Password</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="email"
-                                                    placeholder="coolemail@mail.com"
+                                                    type="password"
                                                     {...field}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Your email address
+                                                Your secure password
                                             </FormDescription>
                                             <FormMessage />
                                         </FormItem>
@@ -86,10 +108,12 @@ export const Register = () => {
 
                                 <FormField
                                     control={form.control}
-                                    name="password"
+                                    name="passwordConfirmation"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Password</FormLabel>
+                                            <FormLabel>
+                                                Password confirmation
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="password"
