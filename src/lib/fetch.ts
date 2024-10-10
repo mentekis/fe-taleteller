@@ -4,7 +4,7 @@ function urlGenerator(pathURL: string) {
     return `${API_V1}/api/v1${pathURL}`;
 }
 
-export default async function jsonFetcher<T>(pathURL: string, data: T, options?: RequestInit) {
+export default async function jsonFetcher<T>(pathURL: string, data?: T, options?: RequestInit) {
     // Create full url
     const url = urlGenerator(pathURL);
 
@@ -12,11 +12,17 @@ export default async function jsonFetcher<T>(pathURL: string, data: T, options?:
         "Content-Type": "application/json"
     }
 
-    const res = await fetch(url, {
+    const requestOpts = {
         ...options,
         headers: header,
-        body: JSON.stringify(data),
-    });
+    }
+
+    // Add body if data is passed
+    if (data) {
+        requestOpts.body = JSON.stringify(data);
+    }
+
+    const res = await fetch(url, requestOpts);
 
     const jsonResponse = await res.json();
 

@@ -8,13 +8,14 @@ import {
     PopoverContent,
     Textarea,
 } from "@/components/ui";
-import { simulateFetch } from "@/lib/fetch";
+import jsonFetcher, { simulateFetch } from "@/lib/fetch";
 import { PopoverAnchor } from "@radix-ui/react-popover";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { StoryLayout } from "./layout.story";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { IStoryData, IStoryPremiseEnhanced } from "@/types/story/story.type";
 
 interface IStoryPremise {
     premise: string;
@@ -26,20 +27,33 @@ export const StoryCreateForm = () => {
 
     const navigate = useNavigate();
 
-    const _queryStoryInitializer = useQuery({
-        queryKey: ["storyInitializer"],
-        queryFn: async () => {
-            try {
-                const result = await simulateFetch("story initializer", 2000);
+    async function getPremiseFromAI() {
+        return (
+            await jsonFetcher("/stories/premise", null, {
+                method: "GET",
+                credentials: "include",
+            })
+        ).premise as IStoryPremise;
+    }
 
-                setOpenPopOver(true);
-
-                setPremise(result);
-            } catch (_error) {
-                setOpenPopOver(false);
-            }
-        },
+    const {
+        data: premiseAI,
+        error,
+        isLoading,
+    } = useQuery({
+        queryKey: ["storyInitializers"],
+        queryFn: getPremiseFromAI,
+        refetchOnWindowFocus: false,
     });
+
+    useEffect(() => {
+        if (isLoading) {
+            console.info("loading...");
+            return;
+        }
+
+        setPremise(premiseAI?.premise as string);
+    }, [premiseAI, isLoading]);
 
     const {
         mutate: handleSendPremise,
@@ -48,24 +62,25 @@ export const StoryCreateForm = () => {
     } = useMutation({
         mutationKey: ["create story"],
         mutationFn: async (data: IStoryPremise) => {
-            try {
-                setButtonState("Creating your story...");
+            setButtonState("Creating your story...");
 
-                await simulateFetch(data, 2000);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setButtonState(null);
-            }
+            const res = await jsonFetcher("/stories", data, {
+                method: "POST",
+            });
+
+            const result = res.data as IStoryData;
+
+            return result;
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             // Invalidate query
             queryClient.invalidateQueries({
                 queryKey: ["storyInitializer"],
             });
 
-            // Move to story stages
-            navigate("/dashboard");
+            navigate("/story/" + data._id + "/stages/1");
+            // // Move to story stages
+            // navigate("/dashboard");
         },
     });
 
@@ -78,12 +93,16 @@ export const StoryCreateForm = () => {
         mutationFn: async (data: IStoryPremise) => {
             setButtonState("Validating...");
 
-            await simulateFetch(data, 2000);
+            const result = await jsonFetcher("/stories/premise", data, {
+                method: "POST",
+            });
 
-            throw new Error("Something went wrong");
+            return result as IStoryPremiseEnhanced;
         },
-        onSuccess: (_, variable) => {
-            handleSendPremise(variable);
+        onSuccess: (data) => {
+            handleSendPremise({
+                premise: data.suggestedPremise,
+            });
         },
         onError: () => {
             setButtonState(null);
@@ -120,6 +139,10 @@ export const StoryCreateForm = () => {
                 <h2 className="text-[20pt] font-semibold">
                     Start Your Adventure
                 </h2>
+
+                {error && <p>{error.message}</p>}
+
+                {premiseAI && <p>{premiseAI.premise}</p>}
 
                 <p className="text-[10pt]">
                     Use the magic of AI to spark your story, or create your own
