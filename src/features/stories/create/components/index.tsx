@@ -8,115 +8,120 @@ import {
     PopoverContent,
     Textarea,
 } from "@/components/ui";
-import jsonFetcher from "@/lib/fetch";
-import { IStoryData, IStoryPremiseEnhanced } from "@/types/story/story.type";
+import { IStoryPremise } from "@/types/story/story.type";
 import { PopoverAnchor } from "@radix-ui/react-popover";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { usePremiseStory } from "../hooks/premise.hooks";
 import { StoryLayout } from "./layout.story";
-
-interface IStoryPremise {
-    premise: string;
-}
+import { useNewStages } from "../hooks/stage.hooks";
 
 export const StoryCreateForm = () => {
+    // State
+    const [openPopOver, setOpenPopOver] = useState<boolean>(false);
+    const [buttonState, setButtonState] = useState<string | null>(null);
+    const [premise, setPremise] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
+
     // Hooks
     const queryClient = useQueryClient();
 
     const navigate = useNavigate();
 
-    async function getPremiseFromAI() {
-        return (
-            await jsonFetcher("/stories/premise", null, {
-                method: "GET",
-                credentials: "include",
-            })
-        ).premise as IStoryPremise;
-    }
-
     const {
-        data: premiseAI,
-        error,
-        isLoading,
-    } = useQuery({
-        queryKey: ["storyInitializers"],
-        queryFn: getPremiseFromAI,
-        refetchOnWindowFocus: false,
-    });
+        errorPremiseAI,
+        premiseAI,
+        isLoadingValidate,
+        errorValidatePremise,
+        isValidateSuccess,
+        handleValidatePremise,
+        dataValidatePremise,
+        handleSendPremise,
+        isLoadingSendPremise,
+        errorSendPremise,
+        isSendPremiseSuccess,
+        dataSendPremise,
+    } = usePremiseStory();
+
+    const newStageMutation = useNewStages();
+
+    // Handle if premiseAI already settled
+    useEffect(() => {
+        setPremise(premiseAI?.premise as string);
+    }, [premiseAI]);
+
+    // Handle validation success and send premise
+    useEffect(() => {
+        if (isValidateSuccess && dataValidatePremise) {
+            // Ensure that the validation data is available before sending premise
+            handleSendPremise({
+                premise: dataValidatePremise.suggestedPremise as string,
+            });
+        }
+    }, [isValidateSuccess, dataValidatePremise, handleSendPremise]);
+
+    // Handle the final send premise success
+    useEffect(() => {
+        if (isSendPremiseSuccess && dataSendPremise) {
+            // Create first stages
+            newStageMutation.mutate({
+                storyId: dataSendPremise._id as string,
+                stageNumber: 1,
+                userChoice: "",
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSendPremiseSuccess, dataSendPremise]);
+
+    // Handle success for new stage
+    useEffect(() => {
+        if (newStageMutation.isSuccess) {
+            queryClient.invalidateQueries({ queryKey: ["storyInitializers"] });
+
+            navigate("/story/" + dataSendPremise?._id + "/stages");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newStageMutation.isSuccess]);
+
+    // Handle errors for validation
+    useEffect(() => {
+        if (errorValidatePremise) {
+            setError(errorValidatePremise.message as string);
+        }
+    }, [errorValidatePremise]);
+
+    // Handle errors for sending premise
+    useEffect(() => {
+        if (errorSendPremise) {
+            setError(errorSendPremise.message as string);
+        }
+    }, [errorSendPremise]);
+
+    // Handle error for new stage
+    useEffect(() => {
+        if (newStageMutation.error) {
+            setError(newStageMutation.error.message as string);
+        }
+    }, [newStageMutation.error]);
+
+    // Handle loading states (you can adjust UI loading messages here)
+    useEffect(() => {
+        if (isLoadingValidate) {
+            setButtonState("Validating premise...");
+        } else if (isLoadingSendPremise) {
+            setButtonState("Creating your story...");
+        } else if (newStageMutation.isPending) {
+            setButtonState("Creating new stage...");
+        } else {
+            setButtonState(null);
+        }
+    }, [isLoadingValidate, isLoadingSendPremise, newStageMutation.isPending]);
 
     useEffect(() => {
-        if (isLoading) {
-            console.info("loading...");
-            return;
-        }
-
-        setPremise(premiseAI?.premise as string);
-    }, [premiseAI, isLoading]);
-
-    const {
-        mutate: handleSendPremise,
-        isPending: isLoadingStory,
-        error: errorSendPremise,
-    } = useMutation({
-        mutationKey: ["create story"],
-        mutationFn: async (data: IStoryPremise) => {
-            setButtonState("Creating your story...");
-
-            const res = await jsonFetcher("/stories", data, {
-                method: "POST",
-            });
-
-            const result = res.data as IStoryData;
-
-            return result;
-        },
-        onSuccess: (data) => {
-            // Invalidate query
-            queryClient.invalidateQueries({
-                queryKey: ["storyInitializer"],
-            });
-
-            navigate("/story/" + data._id + "/stages/1");
-            // // Move to story stages
-            // navigate("/dashboard");
-        },
-    });
-
-    const {
-        mutate: handleValidatePremise,
-        isPending: isLoadingValidate,
-        error: errorValidatePremise,
-    } = useMutation({
-        mutationKey: ["validatePremise"],
-        mutationFn: async (data: IStoryPremise) => {
-            setButtonState("Validating...");
-
-            const result = await jsonFetcher("/stories/premise", data, {
-                method: "POST",
-            });
-
-            return result as IStoryPremiseEnhanced;
-        },
-        onSuccess: (data) => {
-            handleSendPremise({
-                premise: data.suggestedPremise,
-            });
-        },
-        onError: () => {
-            setButtonState(null);
-        },
-    });
-
-    // State
-    const [openPopOver, setOpenPopOver] = useState<boolean>(false);
-    const [buttonState, setButtonState] = useState<string | null>(null);
-    const [premise, setPremise] = useState<string>("");
-
-    // Side effect
-
-    // FUnction
+        setError(errorPremiseAI?.message as string);
+    }, [errorPremiseAI]);
 
     // Form Data
     function handleSubmitPremise() {
@@ -140,9 +145,7 @@ export const StoryCreateForm = () => {
                     Start Your Adventure
                 </h2>
 
-                {error && <p>{error.message}</p>}
-
-                {premiseAI && <p>{premiseAI.premise}</p>}
+                {error && <p className="text-sm text-rose-500">{error}</p>}
 
                 <p className="text-[10pt]">
                     Use the magic of AI to spark your story, or create your own
@@ -193,10 +196,10 @@ export const StoryCreateForm = () => {
                     <Button
                         variant={"primary"}
                         onClick={handleSubmitPremise}
-                        disabled={isLoadingValidate || isLoadingStory}
+                        disabled={isLoadingValidate || isLoadingSendPremise}
                         className="flex items-center justify-center gap-2"
                     >
-                        {(isLoadingValidate || isLoadingStory) && (
+                        {(isLoadingValidate || isLoadingSendPremise) && (
                             <Loader2 className="mx-4 h-4 w-4 animate-spin" />
                         )}
                         <p>{buttonState || "Let's Go"}</p>

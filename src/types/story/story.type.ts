@@ -9,6 +9,10 @@ export interface IStory {
     createdAt: Date;
 }
 
+export interface IStoryPremise {
+    premise: string;
+}
+
 export interface IStoryPremiseEnhanced {
     isValid: boolean;
     suggestedPremise: string;

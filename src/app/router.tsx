@@ -17,10 +17,7 @@ export const AppRouter = () => {
 
                 <Route element={<Dashboard />} path="/dashboard" />
                 <Route element={<StoryCreateForm />} path="/create-story" />
-                <Route
-                    element={<Stages />}
-                    path="/story/:storyId/stages/:stage"
-                />
+                <Route element={<Stages />} path="/story/:storyId/stages" />
             </Routes>
         </BrowserRouter>
     );
