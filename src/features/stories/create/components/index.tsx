@@ -8,14 +8,14 @@ import {
     PopoverContent,
     Textarea,
 } from "@/components/ui";
-import jsonFetcher, { simulateFetch } from "@/lib/fetch";
+import jsonFetcher from "@/lib/fetch";
+import { IStoryData, IStoryPremiseEnhanced } from "@/types/story/story.type";
 import { PopoverAnchor } from "@radix-ui/react-popover";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChangeEvent, useEffect, useState } from "react";
-import { StoryLayout } from "./layout.story";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IStoryData, IStoryPremiseEnhanced } from "@/types/story/story.type";
+import { StoryLayout } from "./layout.story";
 
 interface IStoryPremise {
     premise: string;
