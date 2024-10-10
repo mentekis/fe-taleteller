@@ -11,7 +11,7 @@ export const LandingPage = () => {
             </Helmet>
 
             <div className="relative h-[75%] w-full cursor-default">
-                <div className="hover:text-chathams-blue-700 my-2 flex items-center">
+                <div className="my-2 flex items-center hover:text-chathams-blue-700">
                     <h1 className="text-5xl font-bold">Taleteller</h1>
                     <span className="rotate-[15deg] text-6xl font-bold transition duration-100 hover:rotate-0">
                         !
@@ -22,13 +22,13 @@ export const LandingPage = () => {
                     <h1>Pick your path</h1>
                     <h1>
                         and let your{" "}
-                        <span className="hover:bg-chathams-blue-600 rounded-lg bg-black px-2 py-1 text-white transition duration-100">
+                        <span className="rounded-lg bg-black px-2 py-1 text-white transition duration-100 hover:bg-chathams-blue-600">
                             choices
                         </span>{" "}
                         guide the way!
                     </h1>
 
-                    <p className="hover:bg-chathams-blue-600 w-fit rounded-lg bg-black px-2 py-1 text-white transition duration-100">
+                    <p className="w-fit rounded-lg bg-black px-2 py-1 text-white transition duration-100 hover:bg-chathams-blue-600">
                         "Every story is a new adventure—what will you discover
                         next?" ✨
                     </p>
@@ -42,7 +42,7 @@ export const LandingPage = () => {
                             className="flex-grow rounded-xl"
                             variant={"primary"}
                         >
-                            <Link to={"/login"}>Begin your Adventure</Link>
+                            <Link to={"/auth/login"}>Begin your Adventure</Link>
                         </Button>
                         <Button size={"icon"} variant={"outline"}>
                             {/* <PlaneIcon /> */}

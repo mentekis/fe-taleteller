@@ -22,9 +22,9 @@ export default function useLogin() {
         mutationFn: (data: TLogin) => handleSubmitLogin(data),
         onSuccess: (data) => {
             if (data?.accessToken) {
-                Cookies.set("accessToken", data.accessToken);
+                // Cookies.set("accessToken", data.accessToken);
 
-                Cookies.set("refreshToken", data.refreshToken);
+                // Cookies.set("refreshToken", data.refreshToken);
 
                 setUserAtom(data.data);
 

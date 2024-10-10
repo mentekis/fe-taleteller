@@ -1,5 +1,5 @@
 import { userAtom } from "@/atom";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import { PropsWithChildren, useEffect } from "react";
 import { NavbarDashboard } from "./navbar.dashboard";
@@ -9,22 +9,11 @@ import { DashboardHeader } from "./header.dashboard";
 
 export const LayoutDashboard = ({ children }: PropsWithChildren) => {
     // Atom
-    const setUserAtom = useSetAtom(userAtom);
+    const user = useAtomValue(userAtom);
 
     useEffect(() => {
-        // Cookies.set(
-        //     "user",
-        //     JSON.stringify({
-        //         name: "John Doe Waluyo III",
-        //         email: "bomsiwor@gmail.com",
-        //     })
-        // );
-        const getUser = Cookies.get("user") as string;
-
-        const parsedData = JSON.parse(getUser);
-
-        setUserAtom(parsedData);
-    }, [setUserAtom]);
+        console.info(user);
+    }, [user]);
 
     return (
         <main className="h-screen w-screen bg-[url('/dashboard-background.webp')] bg-cover p-10 font-suse">

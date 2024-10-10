@@ -99,7 +99,10 @@ export const Login = () => {
 
                 <p className="text-center text-muted-foreground">
                     Don’t have an account?{" "}
-                    <Link to="/register" className="underline hover:text-black">
+                    <Link
+                        to="/auth/register"
+                        className="underline hover:text-black"
+                    >
                         Start your adventure now!
                     </Link>
                 </p>

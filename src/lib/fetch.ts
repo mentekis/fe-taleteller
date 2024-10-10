@@ -1,4 +1,5 @@
 import { API_V1 } from "@/config";
+import Cookies from "js-cookie";
 
 function urlGenerator(pathURL: string) {
     return `${API_V1}/api/v1${pathURL}`;
@@ -8,11 +9,13 @@ export default async function jsonFetcher<T>(pathURL: string, data: T, options?:
     // Create full url
     const url = urlGenerator(pathURL);
 
+    const header: HeadersInit = {
+        "Content-Type": "application/json"
+    }
+
     const res = await fetch(url, {
         ...options,
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: header,
         body: JSON.stringify(data),
     });
 
