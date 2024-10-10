@@ -1,11 +1,10 @@
 import { userAtom } from "@/atom";
-import { useAtomValue, useSetAtom } from "jotai";
-import Cookies from "js-cookie";
-import { PropsWithChildren, useEffect } from "react";
-import { NavbarDashboard } from "./navbar.dashboard";
-import { NavbarRowDashboard } from "./navbar-row.dashboard";
+import { useAtomValue } from "jotai";
 import { PlaneIcon } from "lucide-react";
+import { PropsWithChildren, useEffect } from "react";
 import { DashboardHeader } from "./header.dashboard";
+import { NavbarRowDashboard } from "./navbar-row.dashboard";
+import { NavbarDashboard } from "./navbar.dashboard";
 
 export const LayoutDashboard = ({ children }: PropsWithChildren) => {
     // Atom

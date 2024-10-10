@@ -1,5 +1,4 @@
 import { API_V1 } from "@/config";
-import Cookies from "js-cookie";
 
 function urlGenerator(pathURL: string) {
     return `${API_V1}/api/v1${pathURL}`;

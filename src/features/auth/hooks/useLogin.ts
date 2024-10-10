@@ -1,11 +1,10 @@
+import { userAtom } from "@/atom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { handleSubmitLogin, loginSchema, TLogin } from "../services/login";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useSetAtom } from "jotai";
-import { userAtom } from "@/atom";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { handleSubmitLogin, loginSchema, TLogin } from "../services/login";
 
 export default function useLogin() {
     // Hooks
