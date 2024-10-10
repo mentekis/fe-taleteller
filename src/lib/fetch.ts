@@ -13,7 +13,7 @@ export default async function jsonFetcher<T>(pathURL: string, data: T, options?:
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     });
 
     const jsonResponse = await res.json();

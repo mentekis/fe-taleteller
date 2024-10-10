@@ -16,10 +16,10 @@ import { Loader2 } from "lucide-react";
 import { FrontPageLayout } from "@/features/landing-page/components/layout.front-page";
 
 export const Login = () => {
-    const { form, onSubmit, isError, isLoading } = useLogin();
+    const { form, onSubmit, isError, isLoading, error } = useLogin();
 
     return (
-        <FrontPageLayout image="./landing-page-taleteller.jpeg">
+        <FrontPageLayout image="/landing-page-taleteller.jpeg">
             <Helmet>
                 <title>Login to Taleteller</title>
             </Helmet>
@@ -32,9 +32,7 @@ export const Login = () => {
                     Log in to continue your storytelling journey!
                 </h3>
 
-                {isError && (
-                    <p className="text-red-500">Invalid email or password</p>
-                )}
+                {isError && <p className="text-red-500">{error?.message}</p>}
 
                 <Form {...form}>
                     <form

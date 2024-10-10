@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { passwordValidationPattern } from "../utils/password-validation";
 import jsonFetcher from "@/lib/fetch";
+import { IUser } from "@/types/user/user.types";
 
 export const loginSchema = z.object({
     email: z
@@ -17,16 +18,16 @@ export const loginSchema = z.object({
 
 export type TLogin = z.infer<typeof loginSchema>;
 
-export const handleSubmitLogin = async (data: TLogin) => {
-    try {
-        // TODO: implement login
-        await jsonFetcher("/auth/login", data, {
-            method: "POST",
-            credentials: 'include'
-        });
+type TLoginResponse = {
+    accessToken: string;
+    refreshToken: string;
+    data: IUser
+};
 
-    } catch (error) {
-        console.warn(error);
-        throw new Error("Something wrong with your email or password");
-    }
+export const handleSubmitLogin = async (data: TLogin) => {
+    // TODO: implement login
+    return await jsonFetcher("/auth/login", data, {
+        method: "POST",
+        credentials: 'include',
+    }) as TLoginResponse;
 }
