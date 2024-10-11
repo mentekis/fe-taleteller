@@ -8,6 +8,9 @@ import {
     DialogTitle,
     Skeleton,
 } from "../ui";
+import { Link } from "react-router-dom";
+import { urlGenerator } from "@/lib/fetch";
+import { useEffect, useState } from "react";
 
 interface IStoryModalProps {
     data?: IStoryData;
@@ -17,7 +20,25 @@ interface IStoryModalProps {
 }
 
 export const StoryModal = (props: IStoryModalProps) => {
-    //
+    // State
+    const [isShared, setIsShared] = useState<boolean>(false);
+
+    // FUnction
+    function handleCopyLink() {
+        const url = urlGenerator(`/story/${props.data?._id}/stages`);
+
+        navigator.clipboard.writeText(url);
+
+        setIsShared(true);
+    }
+
+    useEffect(() => {
+        if (isShared) {
+            setTimeout(() => {
+                setIsShared(false);
+            }, 3000);
+        }
+    }, [isShared]);
 
     return (
         <Dialog open={props.dialogOpen} onOpenChange={props.setDialogOpen}>
@@ -52,7 +73,10 @@ export const StoryModal = (props: IStoryModalProps) => {
                             <div className="flex gap-4">
                                 <div className="w-1/3">
                                     <img
-                                        src={props.data?.thumbnail}
+                                        src={
+                                            props.data?.thumbnail ||
+                                            "/image-placeholder.png"
+                                        }
                                         alt="Thumbnail"
                                         className="aspect-square w-full rounded-md object-cover shadow-md"
                                     />
@@ -86,14 +110,25 @@ export const StoryModal = (props: IStoryModalProps) => {
                                         </h3>
                                     </div>
 
-                                    <div className="mt-auto grid grid-cols-2 gap-2">
-                                        <Button variant={"primary"}>
-                                            Read Now
-                                        </Button>
-                                        <Button variant={"outlinePrimary"}>
-                                            Share
-                                        </Button>
-                                    </div>
+                                    {props.data?._id && (
+                                        <div className="mt-auto grid grid-cols-2 gap-2">
+                                            <Button variant={"primary"}>
+                                                <Link
+                                                    to={`/story/${props.data?._id}/stages`}
+                                                >
+                                                    Read Now
+                                                </Link>
+                                            </Button>
+                                            <Button
+                                                variant={"outlinePrimary"}
+                                                onClick={handleCopyLink}
+                                            >
+                                                {isShared
+                                                    ? "Link copied!"
+                                                    : "Share"}
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}

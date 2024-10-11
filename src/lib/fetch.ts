@@ -1,6 +1,6 @@
 import { API_V1 } from "@/config";
 
-function urlGenerator(pathURL: string) {
+export function urlGenerator(pathURL: string) {
     return `${API_V1}/api/v1${pathURL}`;
 }
 

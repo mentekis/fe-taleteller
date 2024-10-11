@@ -43,7 +43,7 @@ export const CardStory = (props: ICardStoryProps) => {
             )}
 
             <img
-                src="https://picsum.photos/seed/picsum/200/300"
+                src={props.image || "/image-placeholder.png"}
                 alt={props.title}
                 className="h-[150px] w-full object-cover"
                 onLoad={handleOnImageLoad}
