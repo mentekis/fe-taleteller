@@ -15,7 +15,7 @@ import { LayoutDashboard } from "./layout.dashboard";
 export const Dashboard = () => {
     // State
     // Atom
-    const user = useAtomValue(userAtom);
+    const _user = useAtomValue(userAtom);
 
     // RegularState
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -33,7 +33,7 @@ export const Dashboard = () => {
         },
     });
 
-    const { data: userStories } = useQuery({
+    const { data: _userStories } = useQuery({
         queryKey: ["userStories"],
         queryFn: async () => {
             // const res = await jsonFetcher(

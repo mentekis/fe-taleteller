@@ -7,18 +7,18 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui";
-import jsonFetcher, { simulateFetch } from "@/lib/fetch";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import jsonFetcher from "@/lib/fetch";
+import { IStageData } from "@/types/story/stage.type";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, XIcon } from "lucide-react";
 import { MouseEvent, useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { StoryLayout } from "./layout.story";
-import { IStageData } from "@/types/story/stage.type";
+import { useNavigate, useParams } from "react-router-dom";
 import { useNewStages } from "../hooks/stage.hooks";
+import { StoryLayout } from "./layout.story";
 
 export const Stages = () => {
     // URL Data / Routing
-    const navigate = useNavigate();
+    const _navigate = useNavigate();
 
     const { storyId } = useParams();
 
@@ -32,7 +32,7 @@ export const Stages = () => {
     );
 
     // Hooks
-    const queryClient = useQueryClient();
+    const _queryClient = useQueryClient();
     const newStageMutation = useNewStages();
 
     const {
