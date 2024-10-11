@@ -1,24 +1,14 @@
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui";
-import copyURL from "@/lib/copy-url";
+import AudioStory from "@/components/story/audio.story";
+import { Button } from "@/components/ui";
 import jsonFetcher from "@/lib/fetch";
 import { IStageData } from "@/types/story/stage.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Loader2, XIcon } from "lucide-react";
 import { MouseEvent, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useNewStages } from "../hooks/stage.hooks";
 import { StoryLayout } from "./layout.story";
+import { ModalEndStory } from "./modal-end.story";
 
 export const Stages = () => {
     // URL Data / Routing
@@ -260,60 +250,10 @@ export const Stages = () => {
                 open={openEndStoryDialog}
                 setOpen={setEndStoryDialog}
             />
+
+            {selectedStage?.bgm && (
+                <AudioStory src={selectedStage.bgm} key={selectedStage?.bgm} />
+            )}
         </StoryLayout>
-    );
-};
-
-export const ModalEndStory = (props: {
-    open: boolean;
-    setOpen: (value: boolean) => void;
-}) => {
-    //State
-    const [isSharedClicked, setIsSharedClicked] = useState<boolean>(false);
-
-    // Function copy link
-    function handleCopyLink() {
-        copyURL();
-
-        setIsSharedClicked(true);
-    }
-
-    return (
-        <Dialog open={props.open} onOpenChange={props.setOpen}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>End of story</DialogTitle>
-                    <DialogDescription>
-                        <div className="space-y-2">
-                            <p>We're gonna back to the dashboard</p>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button variant={"primary"}>
-                                    <Link to="/dashboard">Back to deck</Link>
-                                </Button>
-                                <TooltipProvider disableHoverableContent>
-                                    <Tooltip
-                                        open={isSharedClicked}
-                                        onOpenChange={setIsSharedClicked}
-                                    >
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant={"outlinePrimary"}
-                                                onClick={handleCopyLink}
-                                            >
-                                                Share
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent side="right">
-                                            <p>Link Copied</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            </div>
-                        </div>
-                    </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
     );
 };

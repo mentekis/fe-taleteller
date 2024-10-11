@@ -21,17 +21,17 @@ export const LayoutDashboard = ({ children }: PropsWithChildren) => {
                     <NavbarRowDashboard
                         title="Home"
                         icon={<PlaneIcon size={16} />}
-                        to="/"
+                        to="/dashboard"
                     />
                     <NavbarRowDashboard
                         title="Your Stories"
                         icon={<PlaneIcon size={16} />}
-                        to="/"
+                        to="#"
                     />
                     <NavbarRowDashboard
                         title="Explore"
                         icon={<PlaneIcon size={16} />}
-                        to="/"
+                        to="/explore"
                     />
                 </NavbarDashboard>
 
