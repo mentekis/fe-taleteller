@@ -9,27 +9,34 @@ import {
     FormMessage,
     Input,
 } from "@/components/ui";
+import { FrontPageLayout } from "@/features/landing-page/components/layout.front-page";
 import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import useRegister from "../hooks/useRegister";
-import { AuthLayout } from "./layout.auth";
 
 export const Register = () => {
     const { form, onSubmit, isError, isLoading } = useRegister();
 
     return (
-        <AuthLayout>
+        <FrontPageLayout image="/landing-page-taleteller.jpeg">
             <main>
                 <Helmet>
-                    <title>Login to Taleteller</title>
+                    <title>Register to Taleteller</title>
                 </Helmet>
 
                 <section className="w-[400px] max-w-[400px] space-y-2">
-                    <h1>Join with us!</h1>
+                    <h1 className="font-bold">
+                        Join the Adventure, Create Your Story!
+                    </h1>
+                    <h3 className="font-light">
+                        Start your magical journey with us today!
+                    </h3>
 
                     {isError && (
-                        <p className="text-destructive">{isError.message}</p>
+                        <p className="text-destructive">
+                            Error : {isError.message}
+                        </p>
                     )}
 
                     <Form {...form}>
@@ -39,7 +46,7 @@ export const Register = () => {
                         >
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="name"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Name</FormLabel>
@@ -78,23 +85,52 @@ export const Register = () => {
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Password</FormLabel>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="grid grid-cols-2 gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Your secure password
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="passwordConfirmation"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Password confirmation
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
                             <Button
                                 type="submit"
-                                className="w-full"
+                                className="w-full rounded-2xl"
                                 disabled={isLoading}
+                                variant={"primary"}
                             >
                                 {isLoading && (
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -105,13 +141,13 @@ export const Register = () => {
                     </Form>
 
                     <p className="text-center text-sm text-muted-foreground">
-                        Already joined?{" "}
-                        <Link className="hover:text-black" to={"/login"}>
-                            Login here!
+                        Already have an account?{" "}
+                        <Link className="hover:text-black" to={"/auth/login"}>
+                            Continue your journey here!
                         </Link>
                     </p>
                 </section>
             </main>
-        </AuthLayout>
+        </FrontPageLayout>
     );
 };

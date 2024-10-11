@@ -3,7 +3,7 @@ import { passwordValidationPattern } from "../utils/password-validation";
 import jsonFetcher from "@/lib/fetch";
 
 export const registerSchema = z.object({
-    username: z
+    name: z
         .string({ message: "Please input your name, ok?" })
         .min(3, { message: "Name at least 3 characters" }),
     email: z
@@ -16,20 +16,21 @@ export const registerSchema = z.object({
             message:
                 "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
         }),
-});
+    passwordConfirmation: z.string({
+        message: "Please confirm the password"
+    }),
+})
+    .refine((data) => data.password === data.passwordConfirmation, {
+        message: "Passwords don't match",
+        path: ["passwordConfirmation"],
+    });
 
 export type TRegister = z.infer<typeof registerSchema>;
 
 export const submitRegister = async (data: TRegister) => {
-    console.info(data);
+    const result = await jsonFetcher("/auth/register", data, {
+        method: "POST",
+    });
 
-    try {
-        // TODO: Implement register
-        await jsonFetcher("/auth/register", data, {
-            method: "POST",
-        });
-    } catch (error) {
-        console.warn(error);
-        throw new Error("Something went wrongss");
-    }
+    return result;
 }

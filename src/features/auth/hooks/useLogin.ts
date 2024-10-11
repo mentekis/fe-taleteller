@@ -1,8 +1,10 @@
+import { userAtom } from "@/atom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import { useForm } from "react-hook-form";
-import { handleSubmitLogin, loginSchema, TLogin } from "../services/login";
 import { useNavigate } from "react-router-dom";
+import { handleSubmitLogin, loginSchema, TLogin } from "../services/login";
 
 export default function useLogin() {
     // Hooks
@@ -12,11 +14,21 @@ export default function useLogin() {
         resolver: zodResolver(loginSchema),
     });
 
-    const { mutate: submitLogin, isError, isPending } = useMutation({
+    const setUserAtom = useSetAtom(userAtom);
+
+    const { mutate: submitLogin, isError, isPending, error } = useMutation({
         mutationKey: ["login"],
         mutationFn: (data: TLogin) => handleSubmitLogin(data),
-        onSuccess: () => {
-            navigate("/dashboard");
+        onSuccess: (data) => {
+            if (data?.accessToken) {
+                // Cookies.set("accessToken", data.accessToken);
+
+                // Cookies.set("refreshToken", data.refreshToken);
+
+                setUserAtom(data.data);
+
+                navigate("/dashboard");
+            }
         },
     });
 
@@ -24,5 +36,5 @@ export default function useLogin() {
         submitLogin(data);
     }
 
-    return { form, onSubmit, isError, isLoading: isPending };
+    return { form, onSubmit, isError, isLoading: isPending, error };
 }

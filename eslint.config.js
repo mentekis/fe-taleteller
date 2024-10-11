@@ -24,7 +24,15 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "no-console": ["error", { allow: ["error", "info", "warn"] }],
-      "@typescript-eslint/no-empty-object-type": ["error", { allowInterfaces: "always" }]
+      "@typescript-eslint/no-empty-object-type": ["error", { allowInterfaces: "always" }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn", // or "error"
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ]
     },
   },
 )
