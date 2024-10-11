@@ -1,8 +1,19 @@
-import { PropsWithChildren } from "react";
+import Cookies from "node_modules/@types/js-cookie";
+import { PropsWithChildren, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AuthLayout = ({ children }: PropsWithChildren) => {
+    // Navigation
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (Cookies.get("accessToken")) {
+            navigate("/dashboard");
+        }
+    }, []);
+
     return (
-        <main className="font-fredoka grid lg:grid-cols-2">
+        <main className="grid font-fredoka lg:grid-cols-2">
             <div className="h-screen p-6">
                 <div className="h-full w-full overflow-hidden rounded-lg bg-white">
                     <img

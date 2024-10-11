@@ -1,5 +1,4 @@
-import { userAtom } from "@/atom";
-import { useAtomValue } from "jotai";
+import Cookies from "js-cookie";
 import { PlaneIcon } from "lucide-react";
 import { PropsWithChildren, useEffect } from "react";
 import { DashboardHeader } from "./header.dashboard";
@@ -7,12 +6,11 @@ import { NavbarRowDashboard } from "./navbar-row.dashboard";
 import { NavbarDashboard } from "./navbar.dashboard";
 
 export const LayoutDashboard = ({ children }: PropsWithChildren) => {
-    // Atom
-    const user = useAtomValue(userAtom);
-
     useEffect(() => {
-        console.info(user);
-    }, [user]);
+        if (!Cookies.get("accessToken")) {
+            window.location.href = "auth/login";
+        }
+    }, []);
 
     return (
         <main className="h-screen w-screen bg-[url('/dashboard-background.webp')] bg-cover p-10 font-suse">
