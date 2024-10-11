@@ -1,11 +1,9 @@
-import { userAtom } from "@/atom";
 import { OpenAIIcon } from "@/components/icon/openai";
 import { CardStory, StoryModal } from "@/components/story";
 import { Button } from "@/components/ui";
 import jsonFetcher from "@/lib/fetch";
 import { IStoryData } from "@/types/story/story.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -15,7 +13,6 @@ import { LayoutDashboard } from "./layout.dashboard";
 export const Dashboard = () => {
     // State
     // Atom
-    const _user = useAtomValue(userAtom);
 
     // RegularState
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -62,7 +59,9 @@ export const Dashboard = () => {
     });
 
     useEffect(() => {
-        fetchData(selectedID);
+        if (selectedID) {
+            fetchData(selectedID);
+        }
     }, [selectedID, fetchData]);
 
     function handleOpenModal(id: string) {
@@ -157,7 +156,7 @@ export const Dashboard = () => {
                     </p>
 
                     <Link
-                        to={"/"}
+                        to={"/explore"}
                         className="group flex items-center gap-2 font-light hover:text-chathams-blue-900"
                     >
                         <p className="transition group-hover:-translate-x-2">

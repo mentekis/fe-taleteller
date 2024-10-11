@@ -1,5 +1,6 @@
 import { Login, Register } from "@/features/auth/components";
 import { Dashboard } from "@/features/dashboard/components";
+import { Explore } from "@/features/dashboard/components/explore";
 import { LandingPage } from "@/features/landing-page/components";
 import { StoryCreateForm } from "@/features/stories/create/components";
 import { Stages } from "@/features/stories/create/components/stages";
@@ -16,6 +17,7 @@ export const AppRouter = () => {
                 <Route element={<Register />} path="/auth/register" />
 
                 <Route element={<Dashboard />} path="/dashboard" />
+                <Route element={<Explore />} path="/explore" />
                 <Route element={<StoryCreateForm />} path="/create-story" />
                 <Route element={<Stages />} path="/story/:storyId/stages" />
             </Routes>

@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom"
 import jsonFetcher from "@/lib/fetch";
 
 export const useLogout = () => {
-  const navigate = useNavigate();
+  function deleteCookie(name: string) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
 
   async function handleLogout() {
     await jsonFetcher("/auth/logout", {}, {
@@ -10,7 +11,17 @@ export const useLogout = () => {
       credentials: 'include',
     });
 
-    navigate("/auth/login");
+    // Clear all localstorage
+    localStorage.clear();
+
+    // Clear all cookies
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+      const [cookieName] = cookie.split("=");
+      deleteCookie(cookieName);
+    }
+
+    window.location.href = "/auth/login";
   }
 
   return { handleLogout }
