@@ -62,7 +62,9 @@ export const Dashboard = () => {
     });
 
     useEffect(() => {
-        fetchData(selectedID);
+        if (selectedID){
+            fetchData(selectedID);
+        }
     }, [selectedID, fetchData]);
 
     function handleOpenModal(id: string) {

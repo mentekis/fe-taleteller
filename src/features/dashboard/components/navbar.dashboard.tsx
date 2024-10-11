@@ -7,7 +7,7 @@ export const NavbarDashboard = ({ children }: PropsWithChildren) => {
     const { handleLogout } = useLogout();
 
     return (
-        <aside className="relative w-[240px] space-y-4 p-4 transition-all duration-500 hover:bg-black/5">
+        <aside className="flex w-[240px] flex-col justify-center p-4 transition-all duration-500 hover:bg-black/5">
             <div className="flex gap-4">
                 <img
                     src="/favicon-32x32.png"
@@ -26,7 +26,7 @@ export const NavbarDashboard = ({ children }: PropsWithChildren) => {
                 <menu className="space-y-2">{children}</menu>
             </div>
 
-            <div className="absolute bottom-4">
+            <div className="mt-auto">
                 <Button
                     variant={"outline"}
                     className="flex w-full items-center gap-4 rounded-xl text-slate-500 hover:text-chathams-blue-600"

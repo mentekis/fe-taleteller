@@ -138,7 +138,7 @@ export const Stages = () => {
 
     return (
         <StoryLayout>
-            <div className="relative aspect-video h-full">
+            <div className="relative aspect-video h-full max-w-[640px]">
                 <img
                     src={selectedStage?.place}
                     alt="Castle"

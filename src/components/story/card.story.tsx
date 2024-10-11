@@ -1,6 +1,7 @@
 import { formatRelativeTime } from "@/lib/time-parser";
 import { PlayIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui";
+import { useState } from "react";
 
 export interface ICardStoryProps {
     title: string;
@@ -24,7 +25,12 @@ type TCardBodyProps = Omit<
 type TCardFooterProps = Pick<ICardStoryProps, "createdAt">;
 
 export const CardStory = (props: ICardStoryProps) => {
-    const cardBodyData: TCardBodyProps = props;
+    // Function
+    const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
+
+    function handleOnImageLoad() {
+        setIsImageLoaded(true);
+    }
 
     return (
         <div
@@ -32,14 +38,19 @@ export const CardStory = (props: ICardStoryProps) => {
             onClick={props.handleClick}
         >
             {/* Image */}
+            {!isImageLoaded && (
+                <div className="h-[150px] w-full animate-pulse bg-slate-200"></div>
+            )}
+
             <img
-                src={props.image}
-                alt="Example 1"
+                src="https://picsum.photos/seed/picsum/200/300"
+                alt={props.title}
                 className="h-[150px] w-full object-cover"
+                onLoad={handleOnImageLoad}
             />
 
             {/* Card body */}
-            <CardBody {...cardBodyData} />
+            <CardBody {...props} />
 
             {/* Card footer */}
             <CardFooter createdAt={props.createdAt} />
