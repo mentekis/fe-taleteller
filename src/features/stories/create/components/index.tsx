@@ -50,6 +50,8 @@ export const StoryCreateForm = () => {
     // Handle if premiseAI already settled
     useEffect(() => {
         setPremise(premiseAI?.premise as string);
+
+        setOpenPopOver(true);
     }, [premiseAI]);
 
     // Handle validation success and send premise

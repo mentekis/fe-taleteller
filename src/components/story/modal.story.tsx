@@ -1,4 +1,4 @@
-import { IStory } from "@/types/story/story.type";
+import { IStoryData } from "@/types/story/story.type";
 import {
     Button,
     Dialog,
@@ -10,7 +10,7 @@ import {
 } from "../ui";
 
 interface IStoryModalProps {
-    data?: IStory;
+    data?: IStoryData;
     isLoading: boolean;
     dialogOpen: boolean;
     setDialogOpen: (value: boolean) => void;
@@ -52,7 +52,7 @@ export const StoryModal = (props: IStoryModalProps) => {
                             <div className="flex gap-4">
                                 <div className="w-1/3">
                                     <img
-                                        src="/visualnovel-example.webp"
+                                        src={props.data?.thumbnail}
                                         alt="Thumbnail"
                                         className="aspect-square w-full rounded-md object-cover shadow-md"
                                     />
@@ -64,7 +64,7 @@ export const StoryModal = (props: IStoryModalProps) => {
                                             Author
                                         </p>
                                         <h4 className="text-[14pt] font-semibold text-black">
-                                            John Doe
+                                            -
                                         </h4>
                                     </div>
 
@@ -82,7 +82,7 @@ export const StoryModal = (props: IStoryModalProps) => {
                                             Stage
                                         </p>
                                         <h3 className="text-[14pt] font-semibold text-black">
-                                            8 Stages
+                                            {props.data?.maxStage} Stages
                                         </h3>
                                     </div>
 
