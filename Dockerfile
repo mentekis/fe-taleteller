@@ -2,7 +2,7 @@ FROM node:lts-alpine3.20 as builder
 
 WORKDIR /app
 
-COPY package.json ./
+COPY . .
 
 RUN npm i -g pnpm
 RUN npm i -g typescript
@@ -13,15 +13,23 @@ RUN pnpm lint
 
 RUN pnpm build
 
-FROM node:lts-alpine3.20 as server
+ARG SERVICE_HOST
 
-WORKDIR /app
+ENV VITE_API_SERVICE_HOST=${SERVICE_HOST}
 
-RUN npm i -g serve
+EXPOSE 3333
 
-COPY --from=builder /app/dist /app/dist
+CMD [ "pnpm", "dev" ]
 
-EXPOSE 3000
+# FROM node:lts-alpine3.20 as server
 
-CMD [ "serve", "-s", "dist" ]
+# WORKDIR /app
+
+# RUN npm i -g serve
+
+# COPY --from=builder /app/dist /app/dist
+
+# EXPOSE 3000
+
+# CMD [ "serve", "-s", "dist" ]
 
