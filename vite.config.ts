@@ -10,4 +10,14 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    preview: {
+        port: 3334,
+        strictPort: true,
+    },
+    server: {
+        port: 3333,
+        strictPort: true,
+        host: true,
+        origin: "http://0.0.0.0:8080",
+    },
 });
