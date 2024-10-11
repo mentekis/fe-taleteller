@@ -10,7 +10,7 @@ export const AuthLayout = ({ children }: PropsWithChildren) => {
         if (Cookies.get("accessToken")) {
             navigate("/dashboard");
         }
-    }, []);
+    }, [navigate]);
 
     return (
         <main className="grid font-fredoka lg:grid-cols-2">
