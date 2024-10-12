@@ -20,12 +20,12 @@ export const Register = () => {
 
     return (
         <FrontPageLayout image="/landing-page-taleteller.jpeg">
-            <main>
+            <main className="">
                 <Helmet>
                     <title>Register to Taleteller</title>
                 </Helmet>
 
-                <section className="w-[400px] max-w-[400px] space-y-2">
+                <section className="max-w-[400px] space-y-2 lg:w-[400px]">
                     <h1 className="font-bold">
                         Join the Adventure, Create Your Story!
                     </h1>
@@ -85,7 +85,7 @@ export const Register = () => {
                                 )}
                             />
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <FormField
                                     control={form.control}
                                     name="password"

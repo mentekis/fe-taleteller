@@ -24,7 +24,7 @@ export const Login = () => {
                 <title>Login to Taleteller</title>
             </Helmet>
 
-            <section className="w-[400px] max-w-[400px] space-y-2">
+            <section className="max-w-[400px] space-y-2 lg:w-[400px]">
                 <h1 className="font-bold">
                     Welcome Back, Ready for a New Adventure?
                 </h1>
