@@ -1,6 +1,27 @@
+import { useToast } from "@/hooks/use-toast";
 import jsonFetcher from "@/lib/fetch";
+import { useMutation } from "@tanstack/react-query";
 
 export const useLogout = () => {
+  // Hooks
+  const { toast } = useToast();
+
+  const { isPending: logoutPending, mutate: handleLogoutFn } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: handleLogout,
+    onSuccess: () => {
+      window.location.href = "/auth/login";
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      })
+    }
+  })
+
+
   function deleteCookie(name: string) {
     document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
@@ -20,9 +41,7 @@ export const useLogout = () => {
       const [cookieName] = cookie.split("=");
       deleteCookie(cookieName);
     }
-
-    window.location.href = "/auth/login";
   }
 
-  return { handleLogout }
+  return { logoutPending, handleLogoutFn }
 }

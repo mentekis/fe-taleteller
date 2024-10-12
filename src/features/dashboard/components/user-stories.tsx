@@ -1,20 +1,25 @@
+import { userAtom } from "@/atom";
 import { CardStory, StoryModal } from "@/components/story";
 import { useStory } from "@/features/stories/create/hooks/story.hooks";
-import { useEffect, useRef, useState } from "react";
+import { useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { LayoutDashboard } from "./layout.dashboard";
 
-export const Explore = () => {
+export const UserStories = () => {
+    // Atom
+    const user = useAtomValue(userAtom);
+
     // RegularState
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedID, setSelectedID] = useState<string>("");
 
     // Ref
-    const scrollRef = useRef<HTMLDivElement>(null);
 
     // Hooks
-    const { storyData: otherStoriesData } = useStory("otherStories", {
-        limit: 8,
+    const { storyData: userStory } = useStory("userStories", {
+        limit: 50,
+        userId: user?._id as string,
     });
 
     const {
@@ -24,32 +29,6 @@ export const Explore = () => {
     } = useStory("singleStory");
 
     // Side effect
-    useEffect(() => {
-        const scrollContainer = scrollRef.current;
-
-        const handleScroll = () => {
-            if (scrollContainer) {
-                console.info({
-                    scrollTop: scrollContainer.scrollTop,
-                    scrollHeight: scrollContainer.scrollHeight,
-                    clientHeight: scrollContainer.clientHeight,
-                });
-            }
-        };
-
-        // Add event listener to the specific scrollable element
-        if (scrollContainer) {
-            scrollContainer.addEventListener("scroll", handleScroll);
-        }
-
-        // Cleanup listener on unmount
-        return () => {
-            if (scrollContainer) {
-                scrollContainer.removeEventListener("scroll", handleScroll);
-            }
-        };
-    }, []); // Empty dependency array to attach the listener only once
-
     useEffect(() => {
         if (selectedID) {
             fetchSingleStory(selectedID);
@@ -65,29 +44,28 @@ export const Explore = () => {
     return (
         <LayoutDashboard>
             <Helmet>
-                <title>Explore Story</title>
+                <title>Your adventure - Taleteller</title>
             </Helmet>
 
-            <main ref={scrollRef}>
+            <main>
                 <div className="my-8 space-y-4">
                     <div className="flex items-center justify-between">
                         <p className="text-[16pt] font-medium">
-                            Explore all stories
+                            All of your stories
                         </p>
                     </div>
 
-                    {otherStoriesData?.length === 0 && (
+                    {userStory?.length === 0 && (
                         <div className="flex h-[150px] items-center justify-center">
                             <p className="text-center">
-                                Other adventurer have not created any story.{" "}
-                                <br /> Be the first voyager! 🏰
+                                Start your first journey! 🏰
                             </p>
                         </div>
                     )}
 
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                         {/* Card */}
-                        {otherStoriesData?.map((otherStory) => {
+                        {userStory?.map((otherStory) => {
                             return (
                                 <CardStory
                                     key={otherStory._id}

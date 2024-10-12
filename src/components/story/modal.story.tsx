@@ -88,7 +88,7 @@ export const StoryModal = (props: IStoryModalProps) => {
                                             Author
                                         </p>
                                         <h4 className="text-[14pt] font-semibold text-black">
-                                            -
+                                            {props.data?.userId?.name}
                                         </h4>
                                     </div>
 
@@ -112,13 +112,16 @@ export const StoryModal = (props: IStoryModalProps) => {
 
                                     {props.data?._id && (
                                         <div className="mt-auto grid grid-cols-2 gap-2">
-                                            <Button variant={"primary"}>
-                                                <Link
-                                                    to={`/story/${props.data?._id}/stages`}
+                                            <Link
+                                                to={`/story/${props.data?._id}/stages`}
+                                            >
+                                                <Button
+                                                    variant={"primary"}
+                                                    className="w-full"
                                                 >
                                                     Read Now
-                                                </Link>
-                                            </Button>
+                                                </Button>
+                                            </Link>
                                             <Button
                                                 variant={"outlinePrimary"}
                                                 onClick={handleCopyLink}

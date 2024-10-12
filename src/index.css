@@ -95,11 +95,19 @@
     }
 
     .story-popup {
-        @apply select-none rounded-lg bg-black bg-opacity-50 p-4 text-center text-xs text-white transition duration-100;
+        @apply select-none rounded-lg bg-black bg-opacity-50 p-4 text-center text-xs text-white transition duration-100 lg:text-base;
     }
 
     .story-popup.option {
-        @apply cursor-pointer hover:bg-opacity-70;
+        @apply flex cursor-pointer hover:bg-opacity-70;
+    }
+
+    .story-popup.option > p {
+        @apply m-auto;
+    }
+
+    .story-popup.option > .loader {
+        @apply m-auto h-4 w-4 animate-spin;
     }
 
     .story-navigator-wrapper {

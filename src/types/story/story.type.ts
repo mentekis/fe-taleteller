@@ -1,3 +1,5 @@
+import { IUser } from "../user/user.types";
+
 export interface IStory {
     title: string;
     author: string;
@@ -11,6 +13,7 @@ export interface IStory {
 
 export interface IStoryPremise {
     premise: string;
+    userId: string;
 }
 
 export interface IStoryPremiseEnhanced {
@@ -20,7 +23,7 @@ export interface IStoryPremiseEnhanced {
 
 export interface IStoryData {
     _id: string;
-    userId: string;
+    userId: IUser;
     title: string;
     description: string;
     premise: string;

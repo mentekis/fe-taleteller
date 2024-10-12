@@ -92,14 +92,12 @@ export const Stages = () => {
     }, [isPotrait]);
 
     // Function
-    async function handleChooseOption(e: MouseEvent<HTMLButtonElement>) {
-        const choosen = e.currentTarget.value;
-
+    async function handleChooseOption(option: string) {
         newStageMutation.mutate(
             {
                 stageNumber: stageNumber + 2,
                 storyId: storyId as string,
-                userChoice: choosen,
+                userChoice: option,
             },
             {
                 onSuccess: async () => {
@@ -196,7 +194,7 @@ export const Stages = () => {
 
                         {!hasNextPage(stageNumber) && !selectedStage.isEnd && (
                             <div className="mt-2 grid grid-cols-2 gap-2">
-                                <Button
+                                {/* <Button
                                     className="story-popup option"
                                     value={"A"}
                                     onClick={handleChooseOption}
@@ -212,9 +210,35 @@ export const Stages = () => {
                                     {!newStageMutation.isPending && (
                                         <p>{selectedStage.optionA}</p>
                                     )}
-                                </Button>
+                                </Button> */}
 
-                                <Button
+                                <div
+                                    className="story-popup option"
+                                    onClick={() => handleChooseOption("A")}
+                                >
+                                    {newStageMutation.isPending && (
+                                        <Loader2 className="loader" size={16} />
+                                    )}
+
+                                    {!newStageMutation.isPending && (
+                                        <p>{selectedStage.optionA}</p>
+                                    )}
+                                </div>
+
+                                <div
+                                    className="story-popup option"
+                                    onClick={() => handleChooseOption("B")}
+                                >
+                                    {newStageMutation.isPending && (
+                                        <Loader2 className="loader" size={16} />
+                                    )}
+
+                                    {!newStageMutation.isPending && (
+                                        <p>{selectedStage.optionB}</p>
+                                    )}
+                                </div>
+
+                                {/* <Button
                                     className="story-popup option"
                                     value={"B"}
                                     onClick={handleChooseOption}
@@ -230,7 +254,7 @@ export const Stages = () => {
                                     {!newStageMutation.isPending && (
                                         <p>{selectedStage.optionB}</p>
                                     )}
-                                </Button>
+                                </Button> */}
                             </div>
                         )}
 

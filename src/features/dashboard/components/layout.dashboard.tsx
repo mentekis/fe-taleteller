@@ -24,7 +24,7 @@ export const LayoutDashboard = ({ children }: PropsWithChildren) => {
                     <NavbarRowDashboard
                         title="Your Stories"
                         icon={<PlaneIcon size={16} />}
-                        to="#"
+                        to="/user-stories"
                     />
                     <NavbarRowDashboard
                         title="Explore"

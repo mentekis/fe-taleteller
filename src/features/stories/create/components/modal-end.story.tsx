@@ -38,9 +38,14 @@ export const ModalEndStory = (props: {
                             <p>We're gonna back to the dashboard</p>
 
                             <div className="grid grid-cols-2 gap-4">
-                                <Button variant={"primary"}>
-                                    <Link to="/dashboard">Back to deck</Link>
-                                </Button>
+                                <Link to="/dashboard">
+                                    <Button
+                                        variant={"primary"}
+                                        className="w-full"
+                                    >
+                                        Back to deck
+                                    </Button>
+                                </Link>
                                 <TooltipProvider disableHoverableContent>
                                     <Tooltip
                                         open={isSharedClicked}

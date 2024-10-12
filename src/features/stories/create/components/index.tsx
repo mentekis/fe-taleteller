@@ -17,8 +17,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePremiseStory } from "../hooks/premise.hooks";
 import { StoryLayout } from "./layout.story";
 import { useNewStages } from "../hooks/stage.hooks";
+import { userAtom } from "@/atom/user.atom";
+import { useAtomValue } from "jotai";
 
 export const StoryCreateForm = () => {
+    // Atom
+    const user = useAtomValue(userAtom);
+
     // State
     const [openPopOver, setOpenPopOver] = useState<boolean>(false);
     const [buttonState, setButtonState] = useState<string | null>(null);
@@ -49,20 +54,24 @@ export const StoryCreateForm = () => {
 
     // Handle if premiseAI already settled
     useEffect(() => {
-        setPremise(premiseAI?.premise as string);
+        if (premiseAI) {
+            setPremise(premiseAI.premise as string);
 
-        setOpenPopOver(true);
+            setOpenPopOver(true);
+        }
     }, [premiseAI]);
 
-    // Handle validation success and send premise
+    // Story create
+    // Handle validation success and send premise to create story
     useEffect(() => {
         if (isValidateSuccess && dataValidatePremise) {
             // Ensure that the validation data is available before sending premise
             handleSendPremise({
                 premise: dataValidatePremise.suggestedPremise as string,
+                userId: user?._id as string,
             });
         }
-    }, [isValidateSuccess, dataValidatePremise, handleSendPremise]);
+    }, [isValidateSuccess, dataValidatePremise, handleSendPremise, user]);
 
     // Handle the final send premise success
     useEffect(() => {
@@ -130,6 +139,7 @@ export const StoryCreateForm = () => {
         // Construct data
         const payload: IStoryPremise = {
             premise: premise,
+            userId: user?._id as string,
         };
 
         // Call mutation
@@ -198,10 +208,16 @@ export const StoryCreateForm = () => {
                     <Button
                         variant={"primary"}
                         onClick={handleSubmitPremise}
-                        disabled={isLoadingValidate || isLoadingSendPremise}
+                        disabled={
+                            isLoadingValidate ||
+                            isLoadingSendPremise ||
+                            newStageMutation.isPending
+                        }
                         className="flex items-center justify-center gap-2"
                     >
-                        {(isLoadingValidate || isLoadingSendPremise) && (
+                        {(isLoadingValidate ||
+                            isLoadingSendPremise ||
+                            newStageMutation.isPending) && (
                             <Loader2 className="mx-4 h-4 w-4 animate-spin" />
                         )}
                         <p>{buttonState || "Let's Go"}</p>

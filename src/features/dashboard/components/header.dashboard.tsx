@@ -31,8 +31,8 @@ export const DashboardHeader = () => {
 
                 <Avatar>
                     <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
+                        src="/default-img.png"
+                        alt="User"
                         className="h-10 w-10 rounded-xl"
                     />
                     <AvatarFallback>
