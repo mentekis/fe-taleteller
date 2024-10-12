@@ -34,7 +34,7 @@ export const CardStory = (props: ICardStoryProps) => {
 
     return (
         <div
-            className="group flex h-[320px] w-[240px] cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-lg"
+            className="group flex h-[320px] cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-lg lg:w-[240px]"
             onClick={props.handleClick}
         >
             {/* Image */}

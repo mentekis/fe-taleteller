@@ -85,7 +85,7 @@ export const Explore = () => {
                         </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <div className="grid grid-cols-1 justify-items-center gap-4 lg:grid-cols-4 lg:justify-items-start">
                         {/* Card */}
                         {otherStoriesData?.map((otherStory) => {
                             return (

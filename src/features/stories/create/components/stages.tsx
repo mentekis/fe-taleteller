@@ -194,24 +194,6 @@ export const Stages = () => {
 
                         {!hasNextPage(stageNumber) && !selectedStage.isEnd && (
                             <div className="mt-2 grid grid-cols-2 gap-2">
-                                {/* <Button
-                                    className="story-popup option"
-                                    value={"A"}
-                                    onClick={handleChooseOption}
-                                    disabled={newStageMutation.isPending}
-                                >
-                                    {newStageMutation.isPending && (
-                                        <Loader2
-                                            className="mr-2 h-4 w-4 animate-spin"
-                                            size={16}
-                                        />
-                                    )}
-
-                                    {!newStageMutation.isPending && (
-                                        <p>{selectedStage.optionA}</p>
-                                    )}
-                                </Button> */}
-
                                 <div
                                     className="story-popup option"
                                     onClick={() => handleChooseOption("A")}
@@ -237,24 +219,6 @@ export const Stages = () => {
                                         <p>{selectedStage.optionB}</p>
                                     )}
                                 </div>
-
-                                {/* <Button
-                                    className="story-popup option"
-                                    value={"B"}
-                                    onClick={handleChooseOption}
-                                    disabled={newStageMutation.isPending}
-                                >
-                                    {newStageMutation.isPending && (
-                                        <Loader2
-                                            className="mr-2 h-4 w-4 animate-spin"
-                                            size={16}
-                                        />
-                                    )}
-
-                                    {!newStageMutation.isPending && (
-                                        <p>{selectedStage.optionB}</p>
-                                    )}
-                                </Button> */}
                             </div>
                         )}
 

@@ -43,7 +43,7 @@ export const StoryModal = (props: IStoryModalProps) => {
     return (
         <Dialog open={props.dialogOpen} onOpenChange={props.setDialogOpen}>
             <DialogContent
-                className="max-w-2xl"
+                className="w-[280px] rounded-lg md:h-[360px] md:w-[400px] md:overflow-y-scroll lg:w-full lg:max-w-2xl"
                 onInteractOutside={(e) => e.preventDefault()}
             >
                 <DialogHeader>
@@ -70,19 +70,19 @@ export const StoryModal = (props: IStoryModalProps) => {
                         )}
 
                         {!props.isLoading && (
-                            <div className="flex gap-4">
-                                <div className="w-1/3">
+                            <div className="flex flex-col gap-4 lg:flex-row">
+                                <div className="lg:w-1/3">
                                     <img
                                         src={
                                             props.data?.thumbnail ||
                                             "/image-placeholder.png"
                                         }
                                         alt="Thumbnail"
-                                        className="aspect-square w-full rounded-md object-cover shadow-md"
+                                        className="w-full rounded-md object-cover shadow-md md:h-[200px] lg:aspect-square"
                                     />
                                 </div>
 
-                                <div className="flex w-2/3 flex-col">
+                                <div className="flex flex-col lg:w-2/3">
                                     <div>
                                         <p className="text-[9pt] text-slate-500">
                                             Author
@@ -105,13 +105,13 @@ export const StoryModal = (props: IStoryModalProps) => {
                                         <p className="text-[9pt] text-slate-500">
                                             Stage
                                         </p>
-                                        <h3 className="text-[14pt] font-semibold text-black">
+                                        <h3 className="text-sm font-semibold text-black lg:text-[14pt]">
                                             {props.data?.maxStage} Stages
                                         </h3>
                                     </div>
 
                                     {props.data?._id && (
-                                        <div className="mt-auto grid grid-cols-2 gap-2">
+                                        <div className="mt-2 grid grid-cols-2 gap-2 lg:mt-auto">
                                             <Link
                                                 to={`/story/${props.data?._id}/stages`}
                                             >

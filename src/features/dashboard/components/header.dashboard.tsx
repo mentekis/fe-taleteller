@@ -7,8 +7,8 @@ export const DashboardHeader = () => {
     const user = useAtomValue(userAtom);
 
     return (
-        <div className="flex items-center justify-between">
-            <h2>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <h2 className="order-last mt-2 lg:order-first lg:mt-0">
                 Bon Voyage,{" "}
                 <span className="font-semibold text-chathams-blue-900">
                     {" "}
@@ -16,7 +16,7 @@ export const DashboardHeader = () => {
                 </span>
             </h2>
 
-            <div className="flex w-[350px] items-center gap-4">
+            <div className="flex items-center gap-4 lg:w-[350px]">
                 <div className="relative flex-grow">
                     <SearchIcon
                         className="absolute left-3 top-1/2 -translate-y-1/2"

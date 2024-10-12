@@ -51,7 +51,8 @@ export const Dashboard = () => {
                 <title>Shipdeck - Taleteller</title>
             </Helmet>
 
-            <div className="my-4 flex w-full justify-between rounded-2xl bg-chathams-blue-700 px-4 py-2 text-white">
+            {/* Greetings banner */}
+            <div className="my-4 flex w-full flex-col justify-between rounded-2xl bg-chathams-blue-700 px-4 py-2 text-white lg:flex-row">
                 <div>
                     <h2 className="text-[16pt] font-semibold">
                         Ready to start your journey?
@@ -72,13 +73,10 @@ export const Dashboard = () => {
                     </Button>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <OpenAIIcon
-                        fontSize={48}
-                        className="transition duration-200 hover:rotate-90"
-                    />
+                <div className="mt-2 flex items-center justify-end gap-2 lg:justify-normal lg:gap-4">
+                    <OpenAIIcon className="text-[14pt] transition duration-200 hover:rotate-90 lg:text-[48pt]" />
 
-                    <p>AI Powered Storyteller</p>
+                    <p className="text-[12pt]">AI Powered Storyteller</p>
                 </div>
             </div>
 
@@ -114,7 +112,7 @@ export const Dashboard = () => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
                     {/* Card */}
                     {userStories?.map((userStory) => {
                         return (
@@ -159,7 +157,7 @@ export const Dashboard = () => {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
                         {/* Card */}
                         {otherStoriesData?.map((otherStory) => {
                             return (

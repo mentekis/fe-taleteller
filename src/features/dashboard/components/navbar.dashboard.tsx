@@ -20,13 +20,13 @@ export const NavbarDashboard = ({ children }: PropsWithChildren) => {
                 </h2>
             </div>
 
-            <div>
+            <div className="hidden lg:block">
                 <p className="my-2 text-sm text-slate-500">MAIN MENU</p>
 
                 <menu className="space-y-2">{children}</menu>
             </div>
 
-            <div className="mt-auto">
+            <div className="mt-auto hidden lg:block">
                 <Button
                     variant={"outline"}
                     className="flex w-full items-center gap-4 rounded-xl text-slate-500 hover:text-chathams-blue-600"

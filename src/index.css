@@ -95,7 +95,7 @@
     }
 
     .story-popup {
-        @apply select-none rounded-lg bg-black bg-opacity-50 p-4 text-center text-xs text-white transition duration-100 lg:text-base;
+        @apply select-none rounded-lg bg-black bg-opacity-50 p-4 text-center text-xs text-white transition duration-100 md:text-[8pt] lg:text-base;
     }
 
     .story-popup.option {
