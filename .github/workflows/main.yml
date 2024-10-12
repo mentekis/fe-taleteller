@@ -48,7 +48,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Connecting to remote server
-              uses: appleboy/ssh-action@master
+              uses: appleboy/ssh-action@v1.1.0
               with:
                   host: ${{ secrets.FE_TALETELLER_VPS_SECRET_HOST }}
                   username: ${{ secrets.FE_TALETELLER_VPS_SECRET_USER }}
