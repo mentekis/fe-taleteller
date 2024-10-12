@@ -4,7 +4,7 @@ import jsonFetcher from "@/lib/fetch";
 import { IStageData } from "@/types/story/stage.type";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Loader2, XIcon } from "lucide-react";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useNewStages } from "../hooks/stage.hooks";
 import { StoryLayout } from "./layout.story";
