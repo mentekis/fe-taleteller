@@ -12,8 +12,10 @@ export const LandingPage = () => {
 
             <div className="relative h-[75%] w-full cursor-default">
                 <div className="my-2 flex items-center hover:text-chathams-blue-700">
-                    <h1 className="text-5xl font-bold">Taleteller</h1>
-                    <span className="rotate-[15deg] text-6xl font-bold transition duration-100 hover:rotate-0">
+                    <h1 className="text-5xl font-bold 2xl:text-9xl">
+                        Taleteller
+                    </h1>
+                    <span className="rotate-[15deg] text-6xl font-bold transition duration-100 hover:rotate-0 2xl:text-8xl">
                         !
                     </span>
                 </div>
@@ -28,10 +30,12 @@ export const LandingPage = () => {
                         guide the way!
                     </h1>
 
-                    <p className="w-fit rounded-lg bg-black px-2 py-1 text-white transition duration-100 hover:bg-chathams-blue-600">
-                        "Every story is a new adventure—what will you discover
-                        next?" ✨
-                    </p>
+                    <div className="block rounded-lg bg-black px-2 py-1 text-white transition duration-100 hover:bg-chathams-blue-600">
+                        <p className="text-center">
+                            "Every story is a new adventure—what will you
+                            discover next?" ✨
+                        </p>
+                    </div>
                 </div>
 
                 <div className="absolute bottom-0 flex w-full justify-center">

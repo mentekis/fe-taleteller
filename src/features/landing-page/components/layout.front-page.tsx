@@ -12,7 +12,7 @@ export const FrontPageLayout = (props: IFrontPageLayoutProps) => {
                     <img
                         src={props.image}
                         alt={props.imageAlt || "Landing page image"}
-                        className="absolute inset-0 h-full object-cover"
+                        className="absolute inset-0 h-full w-full object-cover"
                     />
                 </div>
 
