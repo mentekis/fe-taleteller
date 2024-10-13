@@ -1,21 +1,31 @@
 import { CardStory, StoryModal } from "@/components/story";
+import { SearchStoryInput } from "@/components/story/search.story";
 import { useStory } from "@/features/stories/create/hooks/story.hooks";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
+import { useLocation } from "react-router-dom";
 import { LayoutDashboard } from "./layout.dashboard";
 
 export const Explore = () => {
+    // URL and location
+    const { state } = useLocation();
+
     // RegularState
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedID, setSelectedID] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
 
     // Ref
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Hooks
-    const { storyData: otherStoriesData } = useStory("otherStories", {
-        limit: 8,
-    });
+    const { storyData: otherStoriesData, storyRefetch } = useStory(
+        "otherStories",
+        {
+            limit: 50,
+            search: search,
+        }
+    );
 
     const {
         singleStory: data,
@@ -24,32 +34,25 @@ export const Explore = () => {
     } = useStory("singleStory");
 
     // Side effect
+    // Set search by data on url query param
     useEffect(() => {
-        const scrollContainer = scrollRef.current;
-
-        const handleScroll = () => {
-            if (scrollContainer) {
-                console.info({
-                    scrollTop: scrollContainer.scrollTop,
-                    scrollHeight: scrollContainer.scrollHeight,
-                    clientHeight: scrollContainer.clientHeight,
-                });
+        if (state?.search) {
+            if (searchInputRef.current) {
+                searchInputRef.current.value = state.search as string;
             }
-        };
 
-        // Add event listener to the specific scrollable element
-        if (scrollContainer) {
-            scrollContainer.addEventListener("scroll", handleScroll);
+            setSearch(state.search);
         }
+    }, [state?.search]);
 
-        // Cleanup listener on unmount
-        return () => {
-            if (scrollContainer) {
-                scrollContainer.removeEventListener("scroll", handleScroll);
-            }
-        };
-    }, []); // Empty dependency array to attach the listener only once
+    // Refetch if search is changed
+    useEffect(() => {
+        if (search !== "") {
+            storyRefetch();
+        }
+    }, [search, storyRefetch]);
 
+    // Open modal
     useEffect(() => {
         if (selectedID) {
             fetchSingleStory(selectedID);
@@ -62,19 +65,32 @@ export const Explore = () => {
         setSelectedID(id);
     }
 
+    function handleSearchStory(e: KeyboardEvent<HTMLInputElement>) {
+        if (e.key == "Enter") {
+            setSearch(e.currentTarget.value);
+
+            return;
+        }
+    }
+
     return (
         <LayoutDashboard>
             <Helmet>
                 <title>Explore Story</title>
             </Helmet>
 
-            <main ref={scrollRef}>
+            <main>
                 <div className="my-8 space-y-4">
                     <div className="flex items-center justify-between">
                         <p className="text-[16pt] font-medium">
                             Explore all stories
                         </p>
                     </div>
+
+                    <SearchStoryInput
+                        ref={searchInputRef}
+                        keyUpFn={handleSearchStory}
+                    />
 
                     {otherStoriesData?.length === 0 && (
                         <div className="flex h-[150px] items-center justify-center">
@@ -85,7 +101,7 @@ export const Explore = () => {
                         </div>
                     )}
 
-                    <div className="grid grid-cols-1 justify-items-center gap-4 lg:grid-cols-4 lg:justify-items-start">
+                    <div className="story-card-grid">
                         {/* Card */}
                         {otherStoriesData?.map((otherStory) => {
                             return (

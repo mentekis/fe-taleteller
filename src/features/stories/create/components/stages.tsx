@@ -1,20 +1,24 @@
+import { userAtom } from "@/atom";
 import AudioStory from "@/components/story/audio.story";
 import { Button } from "@/components/ui";
 import jsonFetcher from "@/lib/fetch";
 import { IStageData } from "@/types/story/stage.type";
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import { ArrowLeft, ArrowRight, Loader2, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useNewStages } from "../hooks/stage.hooks";
+import { useStory } from "../hooks/story.hooks";
 import { StoryLayout } from "./layout.story";
 import { ModalEndStory } from "./modal-end.story";
 
 export const Stages = () => {
+    // Atom
+    const user = useAtomValue(userAtom);
+
     // URL Data / Routing
     const navigate = useNavigate();
-
-    // const queryClient = useQueryClient();
 
     const { storyId } = useParams();
 
@@ -30,6 +34,7 @@ export const Stages = () => {
     );
 
     // Hooks
+    const { singleStory, fetchSingleStory } = useStory(`story-info`);
     const newStageMutation = useNewStages();
 
     const {
@@ -51,6 +56,13 @@ export const Stages = () => {
     });
 
     // Side Effect
+    // Get story information
+    useEffect(() => {
+        if (storyId) {
+            fetchSingleStory(storyId);
+        }
+    }, [storyId, fetchSingleStory]);
+
     // Set stage if there is available stage
     useEffect(() => {
         if (stages?.length) {
@@ -192,35 +204,43 @@ export const Stages = () => {
                             <p>{selectedStage.stageStory}</p>
                         </div>
 
-                        {!hasNextPage(stageNumber) && !selectedStage.isEnd && (
-                            <div className="mt-2 grid grid-cols-2 gap-2">
-                                <div
-                                    className="story-popup option"
-                                    onClick={() => handleChooseOption("A")}
-                                >
-                                    {newStageMutation.isPending && (
-                                        <Loader2 className="loader" size={16} />
-                                    )}
+                        {singleStory?.userId._id == user?._id &&
+                            !hasNextPage(stageNumber) &&
+                            !selectedStage.isEnd && (
+                                <div className="mt-2 grid grid-cols-2 gap-2">
+                                    <div
+                                        className="story-popup option"
+                                        onClick={() => handleChooseOption("A")}
+                                    >
+                                        {newStageMutation.isPending && (
+                                            <Loader2
+                                                className="loader"
+                                                size={16}
+                                            />
+                                        )}
 
-                                    {!newStageMutation.isPending && (
-                                        <p>{selectedStage.optionA}</p>
-                                    )}
+                                        {!newStageMutation.isPending && (
+                                            <p>{selectedStage.optionA}</p>
+                                        )}
+                                    </div>
+
+                                    <div
+                                        className="story-popup option"
+                                        onClick={() => handleChooseOption("B")}
+                                    >
+                                        {newStageMutation.isPending && (
+                                            <Loader2
+                                                className="loader"
+                                                size={16}
+                                            />
+                                        )}
+
+                                        {!newStageMutation.isPending && (
+                                            <p>{selectedStage.optionB}</p>
+                                        )}
+                                    </div>
                                 </div>
-
-                                <div
-                                    className="story-popup option"
-                                    onClick={() => handleChooseOption("B")}
-                                >
-                                    {newStageMutation.isPending && (
-                                        <Loader2 className="loader" size={16} />
-                                    )}
-
-                                    {!newStageMutation.isPending && (
-                                        <p>{selectedStage.optionB}</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                            )}
 
                         {selectedStage.isEnd && (
                             <Button

@@ -1,8 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getSingleStory, getStories, IGetStories } from "../service/get-stories";
+import {
+    getSingleStory,
+    getStories,
+    IGetStories,
+} from "../service/get-stories";
 import { userAtom } from "@/atom";
 import { useAtomValue } from "jotai";
-
 
 export const useStory = (cacheKey: string, params?: IGetStories) => {
     // User
@@ -15,7 +18,11 @@ export const useStory = (cacheKey: string, params?: IGetStories) => {
     }
 
     // Fetch stories
-    const { data: storyData, isLoading: storyLoading } = useQuery({
+    const {
+        data: storyData,
+        isLoading: storyLoading,
+        refetch: storyRefetch,
+    } = useQuery({
         queryKey: [cacheKey],
         queryFn: async () => getStories(params),
         refetchOnWindowFocus: false,
@@ -31,12 +38,12 @@ export const useStory = (cacheKey: string, params?: IGetStories) => {
         mutationFn: async (id: string) => getSingleStory(id),
     });
 
-
     return {
         storyData,
         storyLoading,
         singleStory,
         singleStoryLoading,
-        fetchSingleStory
-    }
-}
+        fetchSingleStory,
+        storyRefetch,
+    };
+};

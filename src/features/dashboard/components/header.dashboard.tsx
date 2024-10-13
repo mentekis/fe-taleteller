@@ -1,10 +1,27 @@
 import { userAtom } from "@/atom";
-import { Avatar, AvatarFallback, AvatarImage, Input } from "@/components/ui";
+import { SearchStoryInput } from "@/components/story/search.story";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui";
 import { useAtomValue } from "jotai";
-import { SearchIcon } from "lucide-react";
+import { KeyboardEvent } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const DashboardHeader = () => {
     const user = useAtomValue(userAtom);
+
+    // URL & location
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // FUnction
+    function handleSearchStory(e: KeyboardEvent<HTMLInputElement>) {
+        if (e.key == "Enter") {
+            navigate("/explore", {
+                state: {
+                    search: e.currentTarget.value,
+                },
+            });
+        }
+    }
 
     return (
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
@@ -16,18 +33,10 @@ export const DashboardHeader = () => {
                 </span>
             </h2>
 
-            <div className="flex items-center gap-4 lg:w-[350px]">
-                <div className="relative flex-grow">
-                    <SearchIcon
-                        className="absolute left-3 top-1/2 -translate-y-1/2"
-                        size={16}
-                    />
-
-                    <Input
-                        placeholder="explore stories"
-                        className="rounded-xl pl-9"
-                    />
-                </div>
+            <div className="flex items-center justify-end gap-4 lg:w-[350px]">
+                {location?.pathname !== "/explore" && (
+                    <SearchStoryInput keyUpFn={handleSearchStory} />
+                )}
 
                 <Avatar>
                     <AvatarImage

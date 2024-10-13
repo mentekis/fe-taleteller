@@ -112,7 +112,7 @@ export const Dashboard = () => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
+                <div className="story-card-grid">
                     {/* Card */}
                     {userStories?.map((userStory) => {
                         return (
@@ -157,7 +157,7 @@ export const Dashboard = () => {
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
+                    <div className="story-card-grid">
                         {/* Card */}
                         {otherStoriesData?.map((otherStory) => {
                             return (
