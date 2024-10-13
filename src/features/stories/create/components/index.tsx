@@ -19,6 +19,7 @@ import { StoryLayout } from "./layout.story";
 import { useNewStages } from "../hooks/stage.hooks";
 import { userAtom } from "@/atom/user.atom";
 import { useAtomValue } from "jotai";
+import { PremiseValidationModal } from "@/components/story/modal.premise";
 
 export const StoryCreateForm = () => {
     // Atom
@@ -29,6 +30,8 @@ export const StoryCreateForm = () => {
     const [buttonState, setButtonState] = useState<string | null>(null);
     const [premise, setPremise] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
+    const [premiseValidationModalOpen, setPremiseValidationModalOpen] =
+        useState<boolean>(false);
 
     // Hooks
     const queryClient = useQueryClient();
@@ -64,13 +67,25 @@ export const StoryCreateForm = () => {
     // Story create
     // Handle validation success and send premise to create story
     useEffect(() => {
-        if (isValidateSuccess && dataValidatePremise) {
-            // Ensure that the validation data is available before sending premise
-            handleSendPremise({
-                premise: dataValidatePremise.suggestedPremise as string,
-                userId: user?._id as string,
-            });
+        if (!isValidateSuccess || !dataValidatePremise) {
+            return;
         }
+
+        // Check if the validation has failed
+        if (!dataValidatePremise.isValid) {
+            setError("Your premise is not valid!");
+
+            // Open premise validation modal
+            setPremiseValidationModalOpen(true);
+
+            return;
+        }
+
+        // Ensure that the validation data is available before sending premise
+        handleSendPremise({
+            premise: dataValidatePremise.suggestedPremise as string,
+            userId: user?._id as string,
+        });
     }, [isValidateSuccess, dataValidatePremise, handleSendPremise, user]);
 
     // Handle the final send premise success
@@ -224,6 +239,14 @@ export const StoryCreateForm = () => {
                     </Button>
                 </div>
             </div>
+
+            {/* Premise Validation */}
+            <PremiseValidationModal
+                data={dataValidatePremise}
+                setDialogOpen={setPremiseValidationModalOpen}
+                setNewPremise={setPremise}
+                dialogOpen={premiseValidationModalOpen}
+            />
         </StoryLayout>
     );
 };

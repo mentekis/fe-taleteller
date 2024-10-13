@@ -43,7 +43,7 @@ export const StoryModal = (props: IStoryModalProps) => {
     return (
         <Dialog open={props.dialogOpen} onOpenChange={props.setDialogOpen}>
             <DialogContent
-                className="w-[280px] rounded-lg md:h-[360px] md:w-[400px] md:overflow-y-scroll lg:w-full lg:max-w-2xl"
+                className="w-[280px] rounded-lg md:h-[360px] md:w-[400px] md:overflow-y-scroll lg:h-fit lg:w-full lg:max-w-2xl"
                 onInteractOutside={(e) => e.preventDefault()}
             >
                 <DialogHeader>
